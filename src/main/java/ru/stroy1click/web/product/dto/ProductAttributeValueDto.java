@@ -1,4 +1,4 @@
-package ru.stroy1click.web.dto;
+package ru.stroy1click.web.product.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

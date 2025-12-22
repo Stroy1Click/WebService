@@ -1,4 +1,4 @@
-package ru.stroy1click.web.dto;
+package ru.stroy1click.web.order.item.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

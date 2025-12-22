@@ -1,4 +1,4 @@
-package ru.stroy1click.web.dto;
+package ru.stroy1click.web.category.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

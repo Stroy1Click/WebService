@@ -1,4 +1,4 @@
-package ru.stroy1click.web.dto;
+package ru.stroy1click.web.subcategory.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -15,19 +15,19 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductTypeDto implements Serializable {
+public class SubcategoryDto implements Serializable {
 
     private final static Long SerialVersionUID= 1L;
 
     private Integer id;
 
-    @NotNull(message = "{validation.product_type_dto.subcategory_id.not_null}")
-    @Min(value = 1, message = "{validation.product_type_dto.subcategory_id.min}")
-    private Integer subcategoryId;
+    @NotNull(message = "{validation.subcategorydto.category_id.not_null}")
+    @Min(value = 1, message = "{validation.subcategorydto.category_id.min}")
+    private Integer categoryId;
 
     private String image;
 
-    @NotBlank(message = "{validation.product_type_dto.title.not_blank}")
-    @Length(min = 2, max = 40, message = "{validation.product_type_dto.title.length}")
+    @NotBlank(message = "{validation.subcategorydto.title.not_blank}")
+    @Length(min = 2, max = 40, message = "{validation.subcategorydto.title.length}")
     private String title;
 }

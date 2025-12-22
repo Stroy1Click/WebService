@@ -1,4 +1,4 @@
-package ru.stroy1click.web.dto;
+package ru.stroy1click.web.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import ru.stroy1click.web.model.Role;
+import ru.stroy1click.web.user.model.Role;
 
 import java.io.Serializable;
 

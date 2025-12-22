@@ -1,4 +1,4 @@
-package ru.stroy1click.web.dto;
+package ru.stroy1click.web.product.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

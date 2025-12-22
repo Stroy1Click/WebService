@@ -1,4 +1,4 @@
-package ru.stroy1click.web.exception;
+package ru.stroy1click.web.common.exception;
 
 public class ServiceUnavailableException extends RuntimeException {
 
