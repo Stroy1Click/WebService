@@ -27,3 +27,6 @@ otel:
 
 server:
   port: 3032
+
+url:
+  cluster: "http://localhost:8080"

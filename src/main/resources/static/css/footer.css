@@ -1,0 +1,19 @@
+/* ========== FOOTER ========== */
+
+footer {
+    background: #223628;
+    padding: 50px 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+footer .col {
+    width: 22%;
+    min-width: 200px;
+    color: var(--text-gray);
+}
+
+footer .col h3 { margin-bottom: 15px; }
+footer a { display: block; text-decoration: none; color: var(--text-muted); margin-bottom: 6px; }

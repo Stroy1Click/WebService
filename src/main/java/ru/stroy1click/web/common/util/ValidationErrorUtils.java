@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.validation.FieldError;
-import ru.stroy1click.web.common.exception.NotFoundException;
-import ru.stroy1click.web.common.exception.ServiceErrorResponseException;
-import ru.stroy1click.web.common.exception.ServiceUnavailableException;
-import ru.stroy1click.web.common.exception.ValidationException;
+import ru.stroy1click.web.common.exception.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -29,28 +26,26 @@ public class ValidationErrorUtils {
         String errorBody = extractErrorDetail(response);
         HttpStatus httpStatus = HttpStatus.resolve(response.getStatusCode().value());
 
-        if (httpStatus == null)  throw new RuntimeException("Unknown HTTP status: " + response.getStatusCode().value());
+        if (httpStatus == null)  throw new RuntimeException("Неизвестный HTTP статус: " + response.getStatusCode().value());
 
-        if(response.getStatusCode().is4xxClientError()){
+        if (httpStatus.is4xxClientError()) {
             throwOnUserError(httpStatus, errorBody);
-        } else if (response.getStatusCode().is5xxServerError()) {
-            throwOnServerError(httpStatus, errorBody);
         } else {
-            throw new RuntimeException("Invalid status code");
+            throwOnServerError(httpStatus, errorBody);
         }
     }
 
     private static String extractErrorDetail(ClientHttpResponse response) {
         try {
             byte[] bodyBytes = response.getBody().readAllBytes();
-            if (bodyBytes.length == 0) throw new RuntimeException("bodyBytes length is 0");
+            if (bodyBytes.length == 0) throw new RuntimeException("длина bodyBytes равна 0");
 
             ProblemDetail problem = objectMapper.readValue(bodyBytes, ProblemDetail.class);
 
             return problem.getDetail() != null ? problem.getDetail() : problem.getTitle();
 
         } catch (Exception e) {
-            throw new RuntimeException("Error message parsing failed");
+            throw new RuntimeException("Ошибка обработки сообщения");
         }
     }
 
@@ -58,7 +53,7 @@ public class ValidationErrorUtils {
         switch (httpStatus){
             case SERVICE_UNAVAILABLE -> throw new ServiceUnavailableException(errorMessage);
             case INTERNAL_SERVER_ERROR -> throw new ServiceErrorResponseException(errorMessage);
-            default -> throw new RuntimeException("Unexpected status code: " + httpStatus.value());
+            default -> throw new RuntimeException("Неизвестный http статус: " + httpStatus.value());
 
         }
     }
@@ -67,7 +62,8 @@ public class ValidationErrorUtils {
         switch (httpStatus){
             case NOT_FOUND -> throw new NotFoundException(errorMessage);
             case BAD_REQUEST -> throw new ValidationException(errorMessage);
-            default -> throw new RuntimeException("Unexpected status code: " + httpStatus.value());
+            case CONFLICT -> throw new AlreadyExistsException(errorMessage);
+            default -> throw new RuntimeException("Неизвестный http статус: " + httpStatus.value());
         }
     }
 

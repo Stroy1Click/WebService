@@ -30,4 +30,7 @@ server:
   port: 3035
 
 url:
-  userService: "http://localhost:8080/api/v1/users"
+  cluster: https://api.novacodeltd.com
+  user: http://localhost:8080/api/v1/users
+  auth: http://localhost:9090/api/v1/auth
+  confirmationCode: http://localhost:6060/api/v1/confirmation-codes

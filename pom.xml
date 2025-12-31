@@ -29,6 +29,7 @@
     <properties>
         <java.version>21</java.version>
         <otel.version>2.22.0</otel.version>
+        <resilience4j.version>2.3.0</resilience4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -71,6 +72,12 @@
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-spring-boot-starter</artifactId>
             <version>${otel.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+            <version>${resilience4j.version}</version>
         </dependency>
 
         <dependency>

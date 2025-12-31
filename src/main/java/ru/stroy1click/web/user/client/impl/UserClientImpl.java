@@ -1,5 +1,6 @@
 package ru.stroy1click.web.user.client.impl;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -14,17 +15,15 @@ import ru.stroy1click.web.user.dto.UserDto;
 
 @Slf4j
 @Component
+@CircuitBreaker(name = "userClient")
 public class UserClientImpl implements UserClient {
 
     private final RestClient restClient;
 
-    private final MessageSource messageSource;
-
-    public UserClientImpl(@Value("${url.userService}") String url, MessageSource messageSource) {
+    public UserClientImpl(@Value("${url.user}") String url) {
         this.restClient = RestClient.builder()
                 .baseUrl(url)
                 .build();
-        this.messageSource = messageSource;
     }
 
     @Override
