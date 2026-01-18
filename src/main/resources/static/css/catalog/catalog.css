@@ -1,0 +1,167 @@
+:root {
+    --bg-main: #1f2a22;
+    --bg-secondary: #182018;
+    --accent: #d0f0c0;
+    --card-bg: #2c3a30;
+    --text-main: #ffffff;
+    --text-soft: #cccccc;
+    --text-muted: #9bb598;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* HEADER */
+header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+header nav {
+    display: flex;
+    gap: 20px;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+header nav a:hover {
+    color: var(--accent);
+}
+
+/* MAIN SECTION */
+main {
+    padding: 40px 60px 80px; /* Уменьшите верхний padding с 160px до 40px */
+    min-height: 80vh;
+}
+
+h1 {
+    margin-bottom: 30px;
+    font-size: 32px;
+}
+
+/* GRID SECTION - Исправлено расплющивание */
+.grid {
+    display: grid;
+    /* auto-fill + max-width колонки (350px) не дают карточке растягиваться на весь экран */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 350px));
+    gap: 25px;
+    justify-content: flex-start; /* Карточки идут слева направо */
+}
+
+/* CARD - Исправлено отображение одной карточки */
+.card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: block; /* Делаем ссылкой-блоком */
+    text-decoration: none;
+    color: inherit;
+    height: 250px; /* Фиксированная высота карточки */
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* CARD INFO - Улучшенный градиент для читаемости текста */
+.card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    /* Более глубокий градиент снизу вверх */
+    background: linear-gradient(to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.card-sub {
+    font-size: 14px;
+    color: var(--text-soft);
+    line-height: 1.3;
+}
+
+/* Состояние загрузки или ошибки */
+.loading-text, .error-text {
+    grid-column: 1 / -1; /* Текст занимает всю ширину сетки */
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: var(--text-soft);
+}
+
+/* FOOTER */
+footer {
+    padding: 60px;
+    background: var(--bg-secondary);
+    color: var(--text-soft);
+}
+
+footer .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+}
+
+footer h3 {
+    color: #fff;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+footer ul {
+    list-style: none;
+    line-height: 1.7;
+}

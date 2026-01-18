@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+    <title>Товары</title>
+    <link rel="stylesheet" href="../../static/css/catalog/product.css" th:href="@{/css/catalog/product.css}">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="logo">Stroy1Click</div>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="/categories">Категории</a>
+    </nav>
+    <div class="header-actions">
+        <button class="action-btn cart-btn"><span class="btn-text">Корзина</span></button>
+    </div>
+</header>
+
+<main class="layout">
+    <aside id="sidebar" class="sidebar">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
+            <h3>Фильтры</h3>
+            <button id="closeSidebar" style="background:none; border:none; color:#555; font-size:24px; padding:0; display:none;">&times;</button>
+        </div>
+
+        <div id="dynamic-filters"></div>
+
+        <div class="filter">
+            <button id="applyBtn" class="apply">Применить</button>
+        </div>
+    </aside>
+
+    <section class="content">
+        <div class="toolbar">
+            <div class="toolbar-top">
+                <div class="search">
+                    <input id="search" type="search" placeholder="Поиск товара...">
+                </div>
+                <button id="filterToggle" class="filter-toggle-btn">Фильтры</button>
+            </div>
+            <div class="controls">
+                <div class="view-toggle">
+                    <button id="gridBtn" class="active">Grid</button>
+                    <button id="listBtn">List</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="grid" class="grid">
+            <div class="loader-container">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <div id="pagination" class="pagination"></div>
+    </section>
+
+    <div id="overlayBg" class="overlay-bg"></div>
+
+</main>
+
+<footer>
+    <div class="col">
+        <h3>Stroy1Click</h3>
+        <p>Надёжный поставщик строительных материалов с 2019 года.</p>
+        <p>+7 999 999 99 99</p>
+        <p>forexample@mail.ru</p>
+        <p>город, улица, дом</p>
+    </div>
+
+    <div class="col">
+        <h3>Категории</h3>
+        <a href="#">Кирпич и блоки</a>
+        <a href="#">Цемент и смеси</a>
+        <a href="#">Инструменты</a>
+        <a href="#">Сантехника</a>
+        <a href="#">Электрика</a>
+        <a href="#">Кровля</a>
+    </div>
+
+    <div class="col">
+        <h3>Клиентам</h3>
+        <a href="#">Гарантии</a>
+        <a href="#">Контакты</a>
+        <a href="#">О компании</a>
+    </div>
+
+    <div class="col">
+        <h3>Подкатегории</h3>
+        <a href="#">Кирпич и блоки</a>
+        <a href="#">Цемент и смеси</a>
+        <a href="#">Инструменты</a>
+        <a href="#">Сантехника</a>
+        <a href="#">Электрика</a>
+        <a href="#">Кровля</a>
+    </div>
+</footer>
+
+<script th:src="@{/js/catalog/product.js}"></script>
+
+<script>
+    // Мобильный сайдбар
+    const filterToggle = document.getElementById('filterToggle');
+    const overlayBg = document.getElementById('overlayBg');
+    const closeSidebarBtn = document.getElementById('closeSidebar');
+
+    function toggleSidebar(show){
+        if(show) {
+            document.body.classList.add('overlay-open');
+            overlayBg.classList.add('show');
+            closeSidebarBtn.style.display='block';
+        } else {
+            document.body.classList.remove('overlay-open');
+            overlayBg.classList.remove('show');
+            closeSidebarBtn.style.display='none';
+        }
+    }
+
+    // Добавляем обработчики, если их нет
+    if(filterToggle) filterToggle.onclick = () => toggleSidebar(true);
+    if(overlayBg) overlayBg.onclick = () => toggleSidebar(false);
+    if(closeSidebarBtn) closeSidebarBtn.onclick = () => toggleSidebar(false);
+</script>
+
+</body>
+
+</html>
