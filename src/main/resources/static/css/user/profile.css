@@ -1,0 +1,122 @@
+:root {
+    --bg-main: #2f4635;
+    --bg-card: #3d5a45;
+    --text-gray: #d8d8d8;
+    --text-muted: #b5b5b5;
+}
+
+body {
+    margin: 0;
+    background: var(--bg-main);
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* ===== КАРТОЧКИ ===== */
+.profile-card,
+.orders-card {
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: 20px;
+}
+
+/* ===== ПРОФИЛЬ ===== */
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    padding-bottom: 8px;
+}
+
+/* ===== ЗАКАЗ ===== */
+.order {
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.order-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: var(--text-gray);
+}
+
+.order-row strong {
+    color: white;
+}
+
+.empty {
+    text-align: center;
+    color: var(--text-muted);
+}
+/* ===== ФОРМА ОБНОВЛЕНИЯ ПРОФИЛЯ ===== */
+.profile-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Каждая строка с лейблом и полем */
+.info-row {
+    display: flex;
+    flex-direction: column; /* лейбл сверху */
+    gap: 6px;
+}
+
+/* Лейблы */
+.profile-card label {
+    color: var(--text-gray);
+    font-size: 14px;
+}
+
+/* Поля ввода */
+.profile-card input[type="text"] {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.05);
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.2s, background 0.2s;
+}
+
+.profile-card input[type="text"]:focus {
+    border-color: var(--text-gray);
+    background: rgba(255,255,255,0.1);
+}
+
+/* Кнопка */
+.profile-card button.action-btn {
+    background: var(--accent-green);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background 0.2s;
+}
+
+.profile-card button.action-btn:hover {
+    background: #7da089;
+}

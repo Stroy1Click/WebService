@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import ru.stroy1click.web.order.item.dto.OrderItemDto;
 import ru.stroy1click.web.order.model.OrderStatus;
 
 import java.time.LocalDateTime;
@@ -44,7 +43,5 @@ public class OrderDto {
     @Pattern(regexp = "^(\\+7|8)\\d{10}$", message = "{validate.orderdto.contact_phone.pattern}")
     private String contactPhone;
 
-    @Positive(message = "{validate.orderdto.user_id.min}")
-    @NotNull(message = "{validate.orderdto.user_id.not_null}")
     private Long userId;
 }

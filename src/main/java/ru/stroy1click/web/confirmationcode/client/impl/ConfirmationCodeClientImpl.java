@@ -16,7 +16,7 @@ import ru.stroy1click.web.confirmationcode.model.UpdatePasswordRequest;
 
 @Slf4j
 @Service
-@CircuitBreaker(name = "authClient")
+@CircuitBreaker(name = "confirmationCodeClient")
 public class ConfirmationCodeClientImpl implements ConfirmationCodeClient {
 
     private final RestClient restClient;

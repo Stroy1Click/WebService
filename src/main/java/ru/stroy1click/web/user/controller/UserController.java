@@ -32,32 +32,4 @@ public class UserController {
     public UserDto getByEmail(@RequestParam("email") String email){
         return this.userClient.getByEmail(email);
     }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody @Valid UserDto userDto, BindingResult bindingResult){
-        if(bindingResult.hasFieldErrors()) throw new ValidationException(ValidationErrorUtils.collectErrorsToString(
-                bindingResult.getFieldErrors()
-        ));
-
-        this.userClient.update(id, userDto, "jwt");
-        return ResponseEntity.status(HttpStatus.OK).body(
-                this.messageSource.getMessage(
-                        "info.user.update",
-                        null,
-                        Locale.getDefault()
-                )
-        );
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id){
-        this.userClient.delete(id, "jwt");
-        return ResponseEntity.status(HttpStatus.OK).body(
-                this.messageSource.getMessage(
-                        "info.user.delete",
-                        null,
-                        Locale.getDefault()
-                )
-        );
-    }
 }

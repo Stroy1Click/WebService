@@ -39,21 +39,4 @@ public class AuthController {
                 )
         );
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestBody @Valid RefreshTokenRequest refreshTokenRequest,
-                                         BindingResult bindingResult){
-        if(bindingResult.hasFieldErrors()) throw new ValidationException(
-                ValidationErrorUtils.collectErrorsToString(bindingResult.getFieldErrors())
-        );
-
-        this.authClient.logout(refreshTokenRequest);
-        return ResponseEntity.ok(
-                this.messageSource.getMessage(
-                        "info.auth.logout",
-                        null,
-                        Locale.getDefault()
-                )
-        );
-    }
 }

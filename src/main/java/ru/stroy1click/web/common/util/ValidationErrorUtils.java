@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import ru.stroy1click.web.common.exception.*;
 
@@ -33,6 +34,12 @@ public class ValidationErrorUtils {
         } else {
             throwOnServerError(httpStatus, errorBody);
         }
+    }
+
+    public static void validateAuthenticationStatus(ClientHttpResponse response) {
+        String errorBody = extractErrorDetail(response);
+
+        throw new BadCredentialsException(errorBody);
     }
 
     private static String extractErrorDetail(ClientHttpResponse response) {

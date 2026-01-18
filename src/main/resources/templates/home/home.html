@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stroy1Click</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/common/footer.css" th:href="@{/css/common/footer.css}">
+    <style>
+        * { box-sizing:border-box; }
+        html, body { margin:0; padding:0; overflow-x:hidden; }
+
+        body {font-family:'Montserrat', sans-serif; background:#1f2a22; color:#fff;}
+        header {width:100%; padding:20px 20px; display:flex; justify-content:space-between; align-items:center; position:absolute; top:0; left:0; z-index:10; flex-wrap:wrap; gap:10px;}
+        header nav a {margin:0 10px; color:#fff; text-decoration:none; font-weight:500; white-space:nowrap;}
+
+        .hero {
+            position: relative;
+            height: 80vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow:hidden;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+        }
+        .hero-content {position:absolute; bottom:80px; left:60px; max-width:90%;}
+        .hero h1 {font-size:48px; font-weight:900; max-width:600px;}
+        .hero button {margin-top:20px; background:#d0f0c0; padding:12px 28px; border:none; border-radius:8px; font-size:16px; cursor:pointer;}
+
+        .section {padding:60px; max-width:100%;}
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 10px 0;
+            width:100%;
+        }
+
+        .product-card {
+            background: #2c3a30;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .product-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .stats {display:flex; flex-wrap:wrap; justify-content:space-around; padding:80px 60px; font-size:32px; font-weight:700; max-width:100%;}
+
+        .why {padding:80px 60px; background:#2b3a31; border-top:1px solid rgba(255,255,255,0.1); max-width:100%;}
+        .reasons {display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:60px; width:100%;}
+
+        footer {padding:60px; background:#182018; color:#ccc; max-width:100%; overflow-x:hidden;}
+        .why {
+            background:#1b2a21;
+            padding:120px 60px;
+            position:relative;
+            overflow:hidden;
+        }
+        .why-title {
+            font-size:64px;
+            font-weight:900;
+            line-height:1.1;
+            margin-bottom:80px;
+            color:#d0f0c0;
+            text-transform:uppercase;
+        }
+        .reasons.upgraded {
+            display:grid;
+            grid-template-columns:repeat(2, 1fr);
+            gap:80px;
+        }
+        .reason-box.fancy {
+            background:rgba(255,255,255,0.02);
+            border:1px solid rgba(255,255,255,0.05);
+            padding:50px;
+            border-radius:20px;
+            position:relative;
+        }
+        .reason-num.big {
+            font-size:86px;
+            font-weight:900;
+            color:#b4daa0;
+        }
+        .reason-title.subtle {
+            margin-top:10px;
+            letter-spacing:3px;
+            font-size:14px;
+            color:#9bb598;
+        }
+        .reason-text {
+            margin-top:20px;
+            font-size:18px;
+            line-height:1.6;
+            color:#e7e7e7;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 6vw, 48px);
+            line-height: 1.15;
+        }
+
+        @media (max-width: 600px) {
+            .hero-content {
+                left: 20px;
+                right: 20px;
+                bottom: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .why { padding:60px 20px; }
+            .why-title { font-size:36px; margin-bottom:40px; }
+            .reasons.upgraded { grid-template-columns:1fr; gap:40px; }
+            .reason-box.fancy { padding:30px; }
+            .reason-num.big { font-size:56px; }
+            .reason-text { font-size:16px; }
+        }
+        @media (max-width:600px){ header{flex-direction:column; align-items:flex-start; padding:15px 20px;} header nav{display:flex; flex-direction:column; gap:6px; width:100%;} header nav a{font-size:16px;} .logo{font-size:22px; font-weight:700;} }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">Stroy1Click</div>
+    <nav>
+        <a href="#">Каталог</a>
+        <a href="#">О нас</a>
+        <a href="#">Контакты</a>
+    </nav>
+</header>
+
+<section class="hero" style="background-image: url('../../static/images/home/34279c7fce21b04e079dd305a1e3852d16d329d5.jpg');">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>ВСЕ ДЛЯ СТРОИТЕЛЬСТВА И РЕМОНТА</h1>
+        <a href="/categories">
+            <button>Начать покупку</button>
+        </a>
+    </div>
+</section>
+
+<div class="stats">
+    <div>5000+<br><span style="font-size:16px; font-weight:400;">Довольных клиентов</span></div>
+    <div>15<br><span style="font-size:16px; font-weight:400;">Лет опыта</span></div>
+    <div>1000+<br><span style="font-size:16px; font-weight:400;">Видов товаров</span></div>
+</div>
+
+<section class="why">
+    <h2 class="why-title">ПОЧЕМУ ВЫБИРАЮТ ИМЕННО НАС</h2>
+    <div class="reasons upgraded">
+        <div class="reason-box fancy">
+            <div class="reason-num big">01</div>
+            <div class="reason-title subtle">ОСНОВА</div>
+            <div class="reason-text">Каждый материал проходит многоступенчатую систему контроля качества. Мы работаем только с сертифицированными поставщиками, которые подтверждают соответствие международным стандартам.</div>
+        </div>
+        <div class="reason-box fancy">
+            <div class="reason-num big">02</div>
+            <div class="reason-title subtle">ЭКОНОМИКА</div>
+            <div class="reason-text">Прозрачное ценообразование без скрытых наценок. Система скидок для постоянных клиентов и профессиональных строителей. Гарантируем лучшую цену на рынке.</div>
+        </div>
+        <div class="reason-box fancy">
+            <div class="reason-num big">03</div>
+            <div class="reason-title subtle">ЛОГИСТИКА</div>
+            <div class="reason-text">Собственный автопарк и система складов обеспечивают доставку точно в срок. GPS‑мониторинг и страхование груза гарантируют сохранность материалов.</div>
+        </div>
+        <div class="reason-box fancy">
+            <div class="reason-num big">04</div>
+            <div class="reason-title subtle">ЭКСПЕРТИЗА</div>
+            <div class="reason-text">Команда инженеров‑строителей с опытом крупных проектов. Техническая поддержка на всех этапах строительства — от проектирования до сдачи объекта.</div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="col">
+        <h3>Stroy1Click</h3>
+        <p>Надёжный поставщик строительных материалов с 2019 года.</p>
+        <p>+7 999 999 99 99</p>
+        <p>forexample@mail.ru</p>
+        <p>город, улица, дом</p>
+    </div>
+
+    <div class="col">
+        <h3>Категории</h3>
+        <a href="#">Кирпич и блоки</a>
+        <a href="#">Цемент и смеси</a>
+        <a href="#">Инструменты</a>
+        <a href="#">Сантехника</a>
+        <a href="#">Электрика</a>
+        <a href="#">Кровля</a>
+    </div>
+
+    <div class="col">
+        <h3>Клиентам</h3>
+        <a href="#">Гарантии</a>
+        <a href="#">Контакты</a>
+        <a href="#">О компании</a>
+    </div>
+
+    <div class="col">
+        <h3>Подкатегории</h3>
+        <a href="#">Кирпич и блоки</a>
+        <a href="#">Цемент и смеси</a>
+        <a href="#">Инструменты</a>
+        <a href="#">Сантехника</a>
+        <a href="#">Электрика</a>
+        <a href="#">Кровля</a>
+    </div>
+</footer>
+
+</body>
+</html>

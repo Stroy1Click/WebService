@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,16 +38,17 @@ public class DevSecurityConfig {
     @Order(1)
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/api/v1/confirmation-codes","/api/v1/confirmation-codes/**",
-                        "/api/v1/auth/registration")
+                .securityMatcher("/api/**")
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                .authorizeHttpRequests(request ->
+                        request.requestMatchers(HttpMethod.GET, "/api/v1/orders/user")
+                                .authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
                 )
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         return http.build();
     }
@@ -57,7 +59,9 @@ public class DevSecurityConfig {
         http
                 .authorizeHttpRequests(request ->
                         request
-                                .requestMatchers("/css/**", "/images/**", "/js/**", "/account/**")
+                                .requestMatchers("/css/**", "/images/**", "/js/**", "/account/**",
+                                        "/categories", "/categories/**","/subcategories/**", "/subcategories",
+                                        "/product-types/**", "/product-types", "/products/**", "/error", "/error/**")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )

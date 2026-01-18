@@ -53,7 +53,7 @@ public class UserClientImpl implements UserClient {
                     .onStatus(HttpStatusCode::isError,(request, response) -> {
                         ValidationErrorUtils.validateStatus(response);
                     })
-                    .body(Void.class);
+                    .body(String.class);
         } catch (ResourceAccessException e){
             log.error("get error ", e);
             throw new ServiceUnavailableException();
@@ -70,7 +70,7 @@ public class UserClientImpl implements UserClient {
                     .onStatus(HttpStatusCode::isError,(request, response) -> {
                         ValidationErrorUtils.validateStatus(response);
                     })
-                    .body(Void.class);
+                    .body(String.class);
         } catch (ResourceAccessException e){
             log.error("get error ", e);
             throw new ServiceUnavailableException();
@@ -85,7 +85,7 @@ public class UserClientImpl implements UserClient {
                     .uri("/email?email={email}",email)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError,(request, response) -> {
-                        ValidationErrorUtils.validateStatus(response);
+                        ValidationErrorUtils.validateAuthenticationStatus(response);
                     })
                     .body(UserDto.class);
         } catch (ResourceAccessException e){

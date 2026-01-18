@@ -4,6 +4,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
@@ -54,8 +55,8 @@ public class AuthClientImpl implements AuthClient {
                     .uri("/login")
                     .body(authRequest)
                     .retrieve()
-                    .onStatus(HttpStatusCode::isError,(request, response) -> {
-                        ValidationErrorUtils.validateStatus(response);
+                    .onStatus(HttpStatusCode::is4xxClientError,(request, response) -> {
+                        ValidationErrorUtils.validateAuthenticationStatus(response);
                     })
                     .body(JwtResponse.class);
         } catch (ResourceAccessException e){

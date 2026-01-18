@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.stroy1click.web.auth.model.JwtResponse;
 import ru.stroy1click.web.user.dto.UserDto;
 
 import java.util.Collection;
@@ -18,6 +19,8 @@ import java.util.List;
 public class CustomUserDetails implements UserDetails {
 
     private UserDto user;
+
+    private JwtResponse jwtResponse;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
