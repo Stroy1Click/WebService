@@ -8,10 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const errorDiv = document.getElementById('error-message');
     const csrfToken = document.getElementById('csrfToken')?.value;
 
-    // 1. Достаем Email, сохраненный на предыдущем шаге
     const savedEmail = localStorage.getItem('user_email');
 
-    // Если email потерялся (например, пользователь открыл ссылку напрямую), просим вернуться
     if (!savedEmail) {
         showError("Email не найден. Пожалуйста, начните процедуру восстановления заново.");
         form.querySelector('button').disabled = true;
@@ -23,19 +21,17 @@ document.addEventListener('DOMContentLoaded', function () {
         errorDiv.style.display = 'none';
         errorDiv.innerText = '';
 
-        // 2. Простая валидация на фронте (совпадение паролей)
         if (newPassInput.value !== confirmPassInput.value) {
             showError("Пароли не совпадают");
             return;
         }
 
-        // 3. Формируем ВЛОЖЕННЫЙ JSON согласно UpdatePasswordRequest
         const payload = {
             newPassword: newPassInput.value,
             confirmPassword: confirmPassInput.value,
             codeVerificationRequest: {
                 email: savedEmail,
-                code: parseInt(codeInput.value) // Важно: преобразуем код в число
+                code: parseInt(codeInput.value)
             }
         };
 
@@ -58,12 +54,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (response.ok) {
-                // 4. Успех: чистим сторадж и отправляем логиниться
                 localStorage.removeItem('user_email');
                 alert("Пароль успешно изменен! Теперь вы можете войти.");
                 window.location.href = '/account/login';
             } else {
-                // Обработка ошибок
                 handleApiErrors(response.status, data);
             }
         } catch (error) {
@@ -73,12 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function handleApiErrors(status, data) {
-        // Логика разбора Problem Detail
         const fieldErrors = data.errors || (data.properties && data.properties.errors);
 
         if (fieldErrors && typeof fieldErrors === 'object') {
-            // Собираем все ошибки в кучу или берем первую
-            // Spring может вернуть ошибку как "codeVerificationRequest.code": "неверный код"
             const messages = Object.values(fieldErrors).flat();
             showError(messages[0]);
         } else {

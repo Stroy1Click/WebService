@@ -1,10 +1,8 @@
 if (window.registrationScriptLoaded) {
-    // Если скрипт уже загружен, выходим
 } else {
     window.registrationScriptLoaded = true;
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Весь ваш код здесь...
     });
 }
 
@@ -14,9 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const eyeIcon = document.getElementById('eye');
     const passwordInput = form.querySelector('input[name="password"]');
 
-    /**
-     * 1. ЛОГИКА ГЛАЗИКА (ПОКАЗАТЬ/СКРЫТЬ ПАРОЛЬ)
-     */
     if (eyeIcon && passwordInput) {
         eyeIcon.addEventListener('click', () => {
             const isPassword = passwordInput.type === 'password';
@@ -26,17 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /**
-     * 2. ОТПРАВКА ФОРМЫ РЕГИСТРАЦИИ
-     */
     if (registerBtn) {
         registerBtn.addEventListener('click', async function (e) {
             e.preventDefault();
 
-            // Сбрасываем старые ошибки
             clearAllErrors();
 
-            // Сбор данных
             const userDto = {
                 firstName: form.querySelector('input[name="firstName"]').value.trim(),
                 lastName: form.querySelector('input[name="lastName"]').value.trim(),
@@ -67,11 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 if (response.ok) {
-                    // УСПЕХ
                     alert('Регистрация прошла успешно!');
                     window.location.href = '/account/login';
                 } else {
-                    // ОБРАБОТКА ОШИБОК (400, 403, 500)
                     handleServerErrors(response.status, data);
                 }
 
@@ -82,18 +70,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /**
-     * РАСПРЕДЕЛЕНИЕ ОШИБОК ПО ПОЛЯМ
-     */
     function handleServerErrors(status, data) {
         if (status === 400) {
-            // Ищем мапу ошибок (errors) в ответе бэкенда
             const fieldErrors = data.errors || (data.properties && data.properties.errors) || data;
 
             if (typeof fieldErrors === 'object' && !Array.isArray(fieldErrors)) {
                 let foundFields = false;
                 for (const [field, message] of Object.entries(fieldErrors)) {
-                    // Пропускаем технические поля JSON
                     if (['status', 'title', 'detail', 'instance', 'type'].includes(field)) continue;
 
                     showFieldError(field, message);
@@ -108,9 +91,6 @@ document.addEventListener('DOMContentLoaded', function () {
         showGlobalError(message);
     }
 
-    /**
-     * ОТОБРАЖЕНИЕ ТЕКСТА ОШИБКИ ПОД КОНКРЕТНЫМ ИНПУТОМ
-     */
     function showFieldError(fieldName, message) {
         const input = form.querySelector(`input[name="${fieldName}"]`);
         if (input) {
@@ -127,9 +107,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    /**
-     * ВЫВОД ОБЩЕЙ ОШИБКИ ВВЕРХУ ФОРМЫ
-     */
     function showGlobalError(message) {
         let globalErr = document.getElementById('global-error-msg');
         if (!globalErr) {
@@ -145,9 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
         globalErr.style.display = 'block';
     }
 
-    /**
-     * ОЧИСТКА ВСЕХ ОШИБОК ПЕРЕД НОВЫМ ЗАПРОСОМ
-     */
     function clearAllErrors() {
         form.querySelectorAll('.error-message').forEach(el => {
             el.textContent = '';

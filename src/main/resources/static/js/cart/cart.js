@@ -1,24 +1,13 @@
-/**
- * Управление корзиной (используем localStorage)
- * Структура объекта в хранилище:
- * [
- * { id: 1, title: "Товар", price: 1000, image: "link", quantity: 1 },
- * ...
- * ]
- */
 
 const CART_KEY = 'stroy1click_cart';
 
 const CartService = {
 
-    // === 1. Получить данные корзины ===
     getCart() {
         const cart = localStorage.getItem(CART_KEY);
         return cart ? JSON.parse(cart) : [];
     },
 
-    // === 2. Добавить товар ===
-    // Мы сохраняем title и price сразу, чтобы не делать лишних запросов на странице корзины
     addToCart(product, quantity = 1) {
         const cart = this.getCart();
         const existingItem = cart.find(item => item.id === product.id);
@@ -30,7 +19,7 @@ const CartService = {
                 id: product.id,
                 title: product.title,
                 price: product.price,
-                image: product.image, // Первая картинка или заглушка
+                image: product.image,
                 quantity: quantity
             });
         }
@@ -40,20 +29,17 @@ const CartService = {
         alert('Товар добавлен в корзину!');
     },
 
-    // === 3. Удалить товар ===
     removeFromCart(productId) {
         let cart = this.getCart();
         cart = cart.filter(item => item.id !== productId);
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
-        // Перерисовать корзину, если мы на странице корзины
         if (window.location.pathname.includes('cart')) {
             renderCartPage();
         }
         this.updateCartBadge();
     },
 
-    // === 4. Изменить количество ===
     updateQuantity(productId, newQuantity) {
         const cart = this.getCart();
         const item = cart.find(i => i.id === productId);
@@ -65,29 +51,26 @@ const CartService = {
             }
             localStorage.setItem(CART_KEY, JSON.stringify(cart));
             if (window.location.pathname.includes('cart')) {
-                renderCartPage(); // Пересчитать итоги
+                renderCartPage();
             }
         }
     },
 
-    // === 5. Очистить корзину ===
     clearCart() {
         localStorage.removeItem(CART_KEY);
         this.updateCartBadge();
     },
 
-    // === 6. Обновить счетчик в хедере (если есть бейдж) ===
     updateCartBadge() {
         const cart = this.getCart();
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        const badge = document.querySelector('.cart-badge'); // Добавь <span class="cart-badge"> в хедер
+        const badge = document.querySelector('.cart-badge');
         if (badge) {
             badge.innerText = totalItems;
             badge.style.display = totalItems > 0 ? 'inline-block' : 'none';
         }
     },
 
-    // === 7. Оформить заказ (POST запрос) ===
     async checkout(contactPhone, notes, userId) {
         const cart = this.getCart();
 
@@ -96,20 +79,16 @@ const CartService = {
             return;
         }
 
-        // Формируем OrderItemDto
         const orderItems = cart.map(item => ({
             productId: item.id,
             quantity: item.quantity
         }));
 
-        // Формируем OrderDto
-        // Важно: сервер требует LocalDateTime, отправляем ISO строку.
-        // В идеале сервер сам ставит время создания, но раз в DTO @NotNull, шлем текущее.
         const orderDto = {
-            userId: userId, // ID текущего юзера (нужно передать откуда-то)
+            userId: userId,
             contactPhone: contactPhone,
             notes: notes || "",
-            orderStatus: "CREATED", // Или enum, который ждет сервер (например 'CREATED')
+            orderStatus: "CREATED",
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
             orderItems: orderItems
@@ -127,7 +106,7 @@ const CartService = {
             if (response.ok) {
                 alert("Заказ успешно оформлен!");
                 this.clearCart();
-                window.location.href = '/'; // Редирект на главную
+                window.location.href = '/';
             } else {
                 const errorData = await response.json();
                 console.error("Ошибка заказа:", errorData);
@@ -140,7 +119,6 @@ const CartService = {
     }
 };
 
-// Инициализация бейджа при загрузке
 document.addEventListener('DOMContentLoaded', () => {
     CartService.updateCartBadge();
 });

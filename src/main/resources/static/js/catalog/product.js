@@ -15,14 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/**
- * Переход на страницу товара
- */
 function goToProduct(id) {
     window.location.href = `/products/${id}`;
 }
 
-// 1. ЗАГРУЗКА ФИЛЬТРОВ
 async function loadFilters(productTypeId) {
     const container = document.getElementById('dynamic-filters');
     try {
@@ -56,7 +52,6 @@ async function loadFilters(productTypeId) {
     } catch (e) { console.error("Ошибка фильтров", e); }
 }
 
-// 2. ФИЛЬТРАЦИЯ
 async function applyFilters(productTypeId, page = 0) {
     const grid = document.getElementById('grid');
     grid.innerHTML = 'Загрузка...';
@@ -129,7 +124,6 @@ window.changeSlide = function(event, productId, dir) {
     imgs[idx].classList.add('active');
 }
 
-// 4. НАЧАЛЬНАЯ ЗАГРУЗКА И ПАГИНАЦИЯ
 async function loadInitialProducts(productTypeId, page) {
     try {
         const res = await fetch(`/api/v1/products?productTypeId=${productTypeId}&page=${page}&size=${SIZE}`);
@@ -139,7 +133,6 @@ async function loadInitialProducts(productTypeId, page) {
     } catch (e) { console.error(e); }
 }
 
-// В product.js обнови эти функции:
 
 function renderPagination(data, productTypeId, isFilter) {
     const container = document.getElementById('pagination');
@@ -151,7 +144,6 @@ function renderPagination(data, productTypeId, isFilter) {
         const btn = document.createElement('button');
         btn.innerText = i + 1;
 
-        // Добавляем класс active для текущей страницы
         if (i === data.page) {
             btn.classList.add('active');
         }
@@ -162,7 +154,6 @@ function renderPagination(data, productTypeId, isFilter) {
             } else {
                 loadInitialProducts(productTypeId, i);
             }
-            // Скролл вверх при смене страницы
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
         container.appendChild(btn);

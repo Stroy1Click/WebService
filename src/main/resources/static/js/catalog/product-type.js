@@ -21,7 +21,6 @@ async function fetchProductTypes(subcategoryId, container) {
 
         const productTypes = await response.json();
 
-        // --- ДИАГНОСТИКА: Посмотри в консоль браузера (F12) ---
         console.log("Полученные данные:", productTypes);
 
         if (!productTypes || productTypes.length === 0) {
@@ -34,11 +33,8 @@ async function fetchProductTypes(subcategoryId, container) {
             cardLink.className = 'card';
             cardLink.href = `/product-types/${type.id}/products`;
 
-            // Выводим в консоль имя картинки для каждой карточки
             console.log(`Тип: ${type.title}, Имя картинки из БД:`, type.image);
 
-            // ПРОВЕРКА: Если type.image — это null или "", запрос к storage не пойдет.
-            // Мы принудительно формируем путь, если имя файла существует.
             let finalImageUrl = 'https://via.placeholder.com/400x300?text=No+Image';
 
             if (type.image && type.image.trim() !== "") {

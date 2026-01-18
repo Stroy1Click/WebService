@@ -9,21 +9,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const emailInput = document.getElementById('email');
     const errorDiv = document.getElementById('error-message');
 
-    // Пытаемся достать CSRF токен
     const csrfToken = document.getElementById('csrfToken')?.value;
 
-    // Определяем тип из URL (?type=REGISTRATION или ?type=PASSWORD)
     const urlParams = new URLSearchParams(window.location.search);
     const typeParam = urlParams.get('type') || 'REGISTRATION';
 
-    // Автоподстановка email из памяти
     const savedEmail = localStorage.getItem('user_email');
     if (savedEmail && emailInput) {
         emailInput.value = savedEmail;
     }
 
     form.addEventListener('submit', async function (e) {
-        // КРИТИЧЕСКИ ВАЖНО: Остановить стандартную отправку формы
         e.preventDefault();
         e.stopPropagation();
 
@@ -52,12 +48,10 @@ document.addEventListener('DOMContentLoaded', function () {
             try { data = JSON.parse(responseText); } catch (err) { data = { message: responseText }; }
 
             if (response.ok) {
-                // Сохраняем email для следующего шага
                 localStorage.setItem('user_email', emailInput.value.trim());
 
                 alert("Код успешно переотправлен!");
 
-                // Редирект в зависимости от типа
                 if (typeParam === 'PASSWORD') {
                     window.location.href = '/account/forgot-password/reset';
                 } else {

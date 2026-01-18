@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('confirmationForm');
 
-    // Проверка на наличие формы, чтобы избежать ошибок на других страницах
     if (!form) return;
 
     const emailInput = document.getElementById('email');
@@ -11,14 +10,12 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        // 1. Очистка старых ошибок
         errorDiv.style.display = 'none';
         errorDiv.innerText = '';
 
-        // 2. Сбор данных (используем trim() для чистоты ввода)
         const payload = {
             email: emailInput.value.trim(),
-            confirmationCodeType: "PASSWORD" // Должно совпадать с твоим Enum Type
+            confirmationCodeType: "PASSWORD"
         };
 
         try {
@@ -26,12 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken // Передаем токен для прохождения защиты
+                    'X-CSRF-TOKEN': csrfToken
                 },
                 body: JSON.stringify(payload)
             });
 
-            // Пытаемся получить JSON, даже если сервер вернул ошибку
             const responseText = await response.text();
             let data = {};
             try {
@@ -40,13 +36,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 data = { detail: responseText };
             }
 
-            // Внутри email-request.js, там где response.ok:
             if (response.ok) {
-                localStorage.setItem('user_email', emailInput.value.trim()); // СОХРАНЯЕМ EMAIL
+                localStorage.setItem('user_email', emailInput.value.trim());
 
                 window.location.href = '/account/forgot-password/reset';
             }else {
-                // 4. Обработка ошибок валидации и бизнес-логики
                 handleApiErrors(response.status, data);
             }
         } catch (error) {
@@ -56,15 +50,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function handleApiErrors(status, data) {
-        // Проверяем формат Problem Detail (Spring Boot)
         const fieldErrors = data.errors || (data.properties && data.properties.errors);
 
         if (fieldErrors && typeof fieldErrors === 'object') {
-            // Если есть ошибки по полям, берем первую (например, по email)
             const firstMsg = Object.values(fieldErrors).flat()[0];
             showError(firstMsg);
         } else {
-            // Иначе выводим общее сообщение
             showError(data.detail || data.title || `Ошибка сервера: ${status}`);
         }
     }
