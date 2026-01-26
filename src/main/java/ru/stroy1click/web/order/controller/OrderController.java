@@ -56,37 +56,4 @@ public class OrderController {
                 )
         );
     }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable("id") Long id,
-                                         @RequestBody @Valid OrderDto orderDto,
-                                         BindingResult bindingResult){
-        if(bindingResult.hasFieldErrors()) throw new ValidationException(ValidationErrorUtils.collectErrorsToString(
-                bindingResult.getFieldErrors()
-        ));
-
-        this.orderClient.update(id, orderDto, SecurityUtils.getJwt());
-
-        return ResponseEntity.ok(
-                this.messageSource.getMessage(
-                        "info.order.update",
-                        null,
-                        Locale.getDefault()
-                )
-        );
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id){
-        this.orderClient.delete(id, SecurityUtils.getJwt());
-
-        return ResponseEntity.ok(
-                this.messageSource.getMessage(
-                        "info.order.delete",
-                        null,
-                        Locale.getDefault()
-                )
-        );
-    }
-
 }
