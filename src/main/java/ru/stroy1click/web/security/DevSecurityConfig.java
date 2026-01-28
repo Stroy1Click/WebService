@@ -32,7 +32,8 @@ public class DevSecurityConfig {
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(HttpMethod.GET, "/api/v1/orders/user")
                                 .authenticated()
-                                .requestMatchers(HttpMethod.POST,"/api/v1/product-attribute-assignments/filter", "/api/v1/confirmation-codes/**", "/api/v1/confirmation-codes")
+                                .requestMatchers(HttpMethod.POST,"/api/v1/product-attribute-assignments/filter", "/api/v1/confirmation-codes/**",
+                                        "/api/v1/confirmation-codes", "/api/v1/auth/registration")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/**")
                                 .permitAll()

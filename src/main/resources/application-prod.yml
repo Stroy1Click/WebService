@@ -8,23 +8,6 @@ spring:
     basename: messages
     encoding: UTF-8
 
-otel:
-  service:
-    name: "web-service"
-  traces:
-    exporter: "otlp"
-    sampler: "always_on"
-  metrics:
-    exporter: "otlp"
-    export:
-      interval: 5000
-  logs:
-    exporter: "otlp"
-  exporter:
-    otlp:
-      protocol: "grpc"
-      endpoint: "http://localhost:4317"
-
 management:
   health:
     circuitbreakers:
@@ -167,17 +150,20 @@ server:
       timeout: 72h
   port: 3035
 
+jwt:
+  secret: 5367566B5970337336762342342342341139792F4123F452811482B4D6251655468576D5A71347437
+
 url:
-  user: http://localhost:8080/api/v1/users
-  auth: http://localhost:9090/api/v1/auth
-  confirmationCode: http://localhost:6060/api/v1/confirmation-codes
-  category: http://localhost:7070/api/v1/categories
-  subcategory: http://localhost:7070/api/v1/subcategories
-  productType: http://localhost:7070/api/v1/product-types
-  product: http://localhost:7070/api/v1/products
-  attribute: http://localhost:4040/api/v1/attributes
-  attributeOption: http://localhost:4040/api/v1/attribute-options
-  productAttributeAssignment: http://localhost:4040/api/v1/product-attribute-assignments
-  storage: http://localhost:7070/api/v1/storage
-  order: http://localhost:1010/api/v1/orders
-  search: http://localhost:4045/api/v1/search
+  user: https://api.novacodeltd.ru/api/v1/users
+  auth: https://api.novacodeltd.ru/api/v1/auth
+  confirmationCode: https://api.novacodeltd.ru/api/v1/confirmation-codes
+  category: https://api.novacodeltd.ru/api/v1/categories
+  subcategory: https://api.novacodeltd.ru/api/v1/subcategories
+  productType: https://api.novacodeltd.ru/api/v1/product-types
+  product: https://api.novacodeltd.ru/api/v1/products
+  attribute: https://api.novacodeltd.ru/api/v1/attributes
+  attributeOption: https://api.novacodeltd.ru/api/v1/attribute-options
+  productAttributeAssignment: https://api.novacodeltd.ru/api/v1/product-attribute-assignments
+  storage: https://api.novacodeltd.ru/api/v1/storage
+  order: https://api.novacodeltd.ru/api/v1/orders
+  search: https://api.novacodeltd.ru/api/v1/search

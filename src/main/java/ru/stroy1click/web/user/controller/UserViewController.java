@@ -20,7 +20,7 @@ public class UserViewController {
 
     @GetMapping("/profile")
     public String profilePage(Model model){
-        model.addAttribute("user", this.userClient.get(SecurityUtils.getUserId()));
+        model.addAttribute("user", this.userClient.get(SecurityUtils.getUserId(), SecurityUtils.getJwt()));
         model.addAttribute("orders", this.orderClient.getByUserId(SecurityUtils.getUserId(), SecurityUtils.getJwt()));
 
         return "user/profile";
@@ -28,7 +28,7 @@ public class UserViewController {
 
     @GetMapping("/update")
     public String updatePage(Model model){
-        model.addAttribute("user", this.userClient.get(SecurityUtils.getUserId()));
+        model.addAttribute("user", this.userClient.get(SecurityUtils.getUserId(), SecurityUtils.getJwt()));
 
         return "/user/update";
     }

@@ -19,14 +19,14 @@ public class OrderAdminController {
 
     @GetMapping
     public String ordersPage(Model model){
-        model.addAttribute("orders", this.orderClient.getAll());
+        model.addAttribute("orders", this.orderClient.getAll(SecurityUtils.getJwt()));
 
         return "admin/orders";
     }
 
     @GetMapping("/{id}")
     public String orderPage(@PathVariable("id") Long id, Model model){
-        model.addAttribute("orderDto", this.orderClient.get(id));
+        model.addAttribute("orderDto", this.orderClient.get(id, SecurityUtils.getJwt()));
 
         return "admin/order";
     }

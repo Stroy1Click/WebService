@@ -3,7 +3,6 @@ package ru.stroy1click.web.user.client.impl;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
@@ -27,10 +26,11 @@ public class UserClientImpl implements UserClient {
     }
 
     @Override
-    public UserDto get(Long id) {
+    public UserDto get(Long id, String jwt) {
         try {
             return this.restClient.get()
                     .uri("/{id}", id)
+                    .header("Authorization", "Bearer " + jwt)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError,(request, response) -> {
                         ValidationErrorUtils.validateStatus(response);
@@ -48,6 +48,7 @@ public class UserClientImpl implements UserClient {
         try {
             this.restClient.patch()
                     .uri("/{id}", id)
+                    .header("Authorization", "Bearer " + jwt)
                     .body(dto)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError,(request, response) -> {
@@ -66,6 +67,7 @@ public class UserClientImpl implements UserClient {
         try {
             this.restClient.delete()
                     .uri("/{id}", id)
+                    .header("Authorization", "Bearer " + jwt)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError,(request, response) -> {
                         ValidationErrorUtils.validateStatus(response);
@@ -78,12 +80,12 @@ public class UserClientImpl implements UserClient {
     }
 
     @Override
-    public UserDto getByEmail(String email) {
+    public UserDto getByEmail(String email, String jwt) {
         log.info("getByEmail {}", email);
         try {
             return this.restClient.get()
                     .uri("/email?email={email}",email)
-                    .retrieve()
+                    .header("Authorization", "Bearer " + jwt)                    .retrieve()
                     .onStatus(HttpStatusCode::isError,(request, response) -> {
                         ValidationErrorUtils.validateAuthenticationStatus(response);
                     })

@@ -40,7 +40,7 @@ public class AuthClientImpl implements AuthClient {
                     .onStatus(HttpStatusCode::isError, (request, response) -> {
                         ValidationErrorUtils.validateStatus(response);
                     })
-                    .body(Void.class);
+                    .body(String.class);
         } catch (ResourceAccessException e) {
             log.error("get error ", e);
             throw new ServiceUnavailableException();

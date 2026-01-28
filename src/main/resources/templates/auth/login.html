@@ -85,7 +85,6 @@
                            required>
                 </div>
 
-                <!-- CSRF -->
                 <input type="hidden"
                        th:name="${_csrf.parameterName}"
                        th:value="${_csrf.token}"/>
@@ -93,12 +92,11 @@
                 <div class="actions">
                     <a th:href="@{/account/forgot-password/request}">Забыли пароль?</a>
                     <a th:href="@{/account/registration}">Зарегистрироваться</a>
-                    <a th:href="@{/account/verify-email/request}">Подтвердить почту</a>
+                    <a th:href="@{/account/email/request}">Подтвердить почту</a>
                 </div>
 
                 <button type="submit" class="login-btn">Войти</button>
 
-                <!-- Ошибка логина -->
                 <div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']}"
                      style="color: red; margin-top: 10px;"
                      th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">

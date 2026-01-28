@@ -29,7 +29,7 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public OrderDto get(@PathVariable("id") Long id){
-        return this.orderClient.get(id);
+        return this.orderClient.get(id, SecurityUtils.getJwt());
     }
 
     @GetMapping("/user")

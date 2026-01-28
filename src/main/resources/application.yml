@@ -2,7 +2,7 @@ spring:
   application:
     name: Web-Service
   profiles:
-    active: dev
+    active: prod
   config:
     import: application-prod.yml
   messages:
@@ -13,23 +13,6 @@ spring:
       max-request-size: 50MB
       max-file-size: 10MB
       enabled: true
-
-otel:
-  service:
-    name: "web-service"
-  traces:
-    exporter: "otlp"
-    sampler: "always_on"
-  metrics:
-    exporter: "otlp"
-    export:
-      interval: 5000
-  logs:
-    exporter: "otlp"
-  exporter:
-    otlp:
-      protocol: "grpc"
-      endpoint: "http://localhost:4317"
 
 management:
   health:
@@ -184,6 +167,9 @@ server:
     session:
       timeout: 72h
   port: 3035
+
+jwt:
+  secret: 5367566B5970337336762342342342341139792F4123F452811482B4D6251655468576D5A71347437
 
 url:
   user: http://localhost:8080/api/v1/users

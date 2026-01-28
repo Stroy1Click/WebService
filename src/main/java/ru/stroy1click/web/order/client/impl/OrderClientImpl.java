@@ -32,6 +32,7 @@ public class OrderClientImpl implements OrderClient {
         try {
             return this.restClient.get()
                     .uri("/user?userId={userId}", userId)
+                    .header("Authorization", "Bearer " + jwt)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, ((request, response) -> {
                         ValidationErrorUtils.validateStatus(response);
@@ -45,11 +46,12 @@ public class OrderClientImpl implements OrderClient {
     }
 
     @Override
-    public OrderDto get(Long id) {
+    public OrderDto get(Long id, String jwt) {
         log.info("get {}", id);
         try {
             return this.restClient.get()
                     .uri("/{id}", id)
+                    .header("Authorization", "Bearer " + jwt)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, (request, response) -> {
                         ValidationErrorUtils.validateStatus(response);
@@ -62,10 +64,11 @@ public class OrderClientImpl implements OrderClient {
     }
 
     @Override
-    public List<OrderDto> getAll() {
+    public List<OrderDto> getAll(String jwt) {
         log.info("getAll");
         try {
             return this.restClient.get()
+                    .header("Authorization", "Bearer " + jwt)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, (request, response) -> {
                         ValidationErrorUtils.validateStatus(response);
