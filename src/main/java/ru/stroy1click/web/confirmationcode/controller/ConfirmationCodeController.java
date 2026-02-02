@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.stroy1click.web.common.exception.ValidationException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.confirmationcode.client.ConfirmationCodeClient;
-import ru.stroy1click.web.confirmationcode.model.CodeVerificationRequest;
-import ru.stroy1click.web.confirmationcode.model.CreateConfirmationCodeRequest;
-import ru.stroy1click.web.confirmationcode.model.UpdatePasswordRequest;
+import ru.stroy1click.web.confirmationcode.dto.CodeVerificationRequest;
+import ru.stroy1click.web.confirmationcode.dto.CreateConfirmationCodeRequest;
+import ru.stroy1click.web.confirmationcode.dto.UpdatePasswordRequest;
 
 import java.util.Locale;
 

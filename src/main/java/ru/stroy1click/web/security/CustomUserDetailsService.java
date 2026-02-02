@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.stroy1click.web.auth.model.JwtResponse;
+import ru.stroy1click.web.auth.dto.JwtResponse;
 import ru.stroy1click.web.common.service.JwtService;
 import ru.stroy1click.web.user.client.UserClient;
 import ru.stroy1click.web.user.dto.UserDto;

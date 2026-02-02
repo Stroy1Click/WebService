@@ -1,4 +1,4 @@
-package ru.stroy1click.web.attribute.model;
+package ru.stroy1click.web.attribute.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
