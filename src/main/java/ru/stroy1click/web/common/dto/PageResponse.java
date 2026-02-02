@@ -1,4 +1,4 @@
-package ru.stroy1click.web.common.model;
+package ru.stroy1click.web.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

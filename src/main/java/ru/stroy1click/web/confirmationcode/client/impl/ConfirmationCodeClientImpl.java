@@ -10,9 +10,9 @@ import org.springframework.web.client.RestClient;
 import ru.stroy1click.web.common.exception.ServiceUnavailableException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.confirmationcode.client.ConfirmationCodeClient;
-import ru.stroy1click.web.confirmationcode.model.CodeVerificationRequest;
-import ru.stroy1click.web.confirmationcode.model.CreateConfirmationCodeRequest;
-import ru.stroy1click.web.confirmationcode.model.UpdatePasswordRequest;
+import ru.stroy1click.web.confirmationcode.dto.CodeVerificationRequest;
+import ru.stroy1click.web.confirmationcode.dto.CreateConfirmationCodeRequest;
+import ru.stroy1click.web.confirmationcode.dto.UpdatePasswordRequest;
 
 @Slf4j
 @Service

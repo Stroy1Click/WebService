@@ -4,13 +4,11 @@ package ru.stroy1click.web.order.dto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import ru.stroy1click.web.order.model.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

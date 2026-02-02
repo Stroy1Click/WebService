@@ -1,4 +1,4 @@
-package ru.stroy1click.web.auth.model;
+package ru.stroy1click.web.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

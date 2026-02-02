@@ -3,7 +3,7 @@ package ru.stroy1click.web.product.controller;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.stroy1click.web.common.model.PageResponse;
+import ru.stroy1click.web.common.dto.PageResponse;
 import ru.stroy1click.web.product.client.ProductClient;
 import ru.stroy1click.web.product.dto.ProductDto;
 import ru.stroy1click.web.product.dto.ProductImageDto;

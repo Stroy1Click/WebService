@@ -7,8 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import ru.stroy1click.web.auth.client.AuthClient;
-import ru.stroy1click.web.auth.model.AuthRequest;
-import ru.stroy1click.web.auth.model.JwtResponse;
+import ru.stroy1click.web.auth.dto.AuthRequest;
+import ru.stroy1click.web.auth.dto.JwtResponse;
 
 @Component
 @RequiredArgsConstructor

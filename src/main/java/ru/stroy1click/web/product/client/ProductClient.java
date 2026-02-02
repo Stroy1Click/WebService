@@ -2,7 +2,7 @@ package ru.stroy1click.web.product.client;
 
 import org.springframework.web.multipart.MultipartFile;
 import ru.stroy1click.web.common.client.CrudOperations;
-import ru.stroy1click.web.common.model.PageResponse;
+import ru.stroy1click.web.common.dto.PageResponse;
 import ru.stroy1click.web.product.dto.ProductDto;
 import ru.stroy1click.web.product.dto.ProductImageDto;
 

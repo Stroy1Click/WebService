@@ -1,4 +1,4 @@
-package ru.stroy1click.web.auth.model;
+package ru.stroy1click.web.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
