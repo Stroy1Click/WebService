@@ -15,6 +15,7 @@ import ru.stroy1click.web.common.exception.ServiceUnavailableException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.product.type.client.ProductTypeClient;
 import ru.stroy1click.web.product.type.dto.ProductTypeDto;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,9 +28,12 @@ public class ProductTypeClientImpl implements ProductTypeClient {
 
     private final RestClient restClient;
 
-    public ProductTypeClientImpl(@Value("${url.productType}") String url){
+    public ProductTypeClientImpl(@Value("${url.productType}") String url,
+                                 TokenLifecycleInterceptor interceptor){
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 

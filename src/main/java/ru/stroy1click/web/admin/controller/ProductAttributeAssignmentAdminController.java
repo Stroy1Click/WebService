@@ -41,7 +41,7 @@ public class ProductAttributeAssignmentAdminController {
         }
 
         try {
-            this.productAttributeAssignmentClient.create(attributeDto, SecurityUtils.getJwt());
+            this.productAttributeAssignmentClient.create(attributeDto, SecurityUtils.getAccessToken());
         } catch (NotFoundException | AlreadyExistsException e){
             model.addAttribute("error", e.getMessage());
             return "admin/product-attribute-assignments";

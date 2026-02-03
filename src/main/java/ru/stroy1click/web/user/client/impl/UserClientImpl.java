@@ -9,6 +9,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import ru.stroy1click.web.common.exception.ServiceUnavailableException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 import ru.stroy1click.web.user.client.UserClient;
 import ru.stroy1click.web.user.dto.UserDto;
 
@@ -19,9 +20,12 @@ public class UserClientImpl implements UserClient {
 
     private final RestClient restClient;
 
-    public UserClientImpl(@Value("${url.user}") String url) {
+    public UserClientImpl(@Value("${url.user}") String url,
+                          TokenLifecycleInterceptor interceptor) {
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 

@@ -45,8 +45,8 @@ public class ProductAdminController {
         this.imageValidatorUtils.validateImages(images);
 
         try {
-            ProductDto createdProduct = this.productClient.create(productDto, SecurityUtils.getJwt());
-            this.productClient.assignImages(createdProduct.getId(), images, SecurityUtils.getJwt());
+            ProductDto createdProduct = this.productClient.create(productDto, SecurityUtils.getAccessToken());
+            this.productClient.assignImages(createdProduct.getId(), images, SecurityUtils.getAccessToken());
         } catch (NotFoundException | AlreadyExistsException e){
             model.addAttribute("error", e.getMessage());
             return "admin/products";

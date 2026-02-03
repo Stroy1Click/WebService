@@ -45,8 +45,8 @@ public class ProductTypeAdminController {
         this.imageValidatorUtils.validateImage(image);
 
         try {
-            ProductTypeDto createdProductType = this.productTypeClient.create(productTypeDto, SecurityUtils.getJwt());
-            this.productTypeClient.assignImage(createdProductType.getId(), image, SecurityUtils.getJwt());
+            ProductTypeDto createdProductType = this.productTypeClient.create(productTypeDto, SecurityUtils.getAccessToken());
+            this.productTypeClient.assignImage(createdProductType.getId(), image, SecurityUtils.getAccessToken());
         } catch (NotFoundException | AlreadyExistsException e){
             model.addAttribute("error", e.getMessage());
             return "admin/product-types";

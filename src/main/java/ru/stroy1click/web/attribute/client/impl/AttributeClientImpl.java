@@ -12,6 +12,7 @@ import ru.stroy1click.web.attribute.client.AttributeClient;
 import ru.stroy1click.web.attribute.dto.AttributeDto;
 import ru.stroy1click.web.common.exception.ServiceUnavailableException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 
 import java.util.List;
 
@@ -22,9 +23,12 @@ public class AttributeClientImpl implements AttributeClient {
 
     private final RestClient restClient;
 
-    public AttributeClientImpl(@Value("${url.attribute}") String url){
+    public AttributeClientImpl(@Value("${url.attribute}") String url,
+                               TokenLifecycleInterceptor interceptor){
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 

@@ -66,7 +66,7 @@ public class DevSecurityConfig {
                 .formLogin(login -> login
                         .loginPage("/account/login")
                         .loginProcessingUrl("/process_login")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/user/profile", true)
                         .failureUrl("/account/login?error"))
                 .logout(logout ->
                         logout.logoutUrl("/logout")

@@ -44,8 +44,8 @@ public class CategoryAdminController {
         this.imageValidatorUtils.validateImage(image);
 
         try {
-            CategoryDto createdCategory = this.categoryClient.create(categoryDto, SecurityUtils.getJwt());
-            this.categoryClient.assignImage(createdCategory.getId(), image, SecurityUtils.getJwt());
+            CategoryDto createdCategory = this.categoryClient.create(categoryDto, SecurityUtils.getAccessToken());
+            this.categoryClient.assignImage(createdCategory.getId(), image, SecurityUtils.getAccessToken());
         } catch (NotFoundException | AlreadyExistsException e){
             model.addAttribute("error", e.getMessage());
             return "admin/categories";

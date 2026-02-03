@@ -41,7 +41,7 @@ public class AttributeOptionAdminController {
         }
 
         try {
-            this.attributeOption.create(attributeOptionDto, SecurityUtils.getJwt());
+            this.attributeOption.create(attributeOptionDto, SecurityUtils.getAccessToken());
         } catch (NotFoundException | AlreadyExistsException e){
             model.addAttribute("error", e.getMessage());
             return "admin/attribute-options";

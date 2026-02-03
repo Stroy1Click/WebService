@@ -19,14 +19,14 @@ public class OrderAdminController {
 
     @GetMapping
     public String ordersPage(Model model){
-        model.addAttribute("orders", this.orderClient.getAll(SecurityUtils.getJwt()));
+        model.addAttribute("orders", this.orderClient.getAll(SecurityUtils.getAccessToken()));
 
         return "admin/orders";
     }
 
     @GetMapping("/{id}")
     public String orderPage(@PathVariable("id") Long id, Model model){
-        model.addAttribute("orderDto", this.orderClient.get(id, SecurityUtils.getJwt()));
+        model.addAttribute("orderDto", this.orderClient.get(id, SecurityUtils.getAccessToken()));
 
         return "admin/order";
     }
@@ -41,7 +41,7 @@ public class OrderAdminController {
             return "admin/order";
         }
 
-        this.orderClient.update(id, orderDto, SecurityUtils.getJwt());
+        this.orderClient.update(id, orderDto, SecurityUtils.getAccessToken());
 
         return "redirect:/admin/orders/" + id;
     }

@@ -14,6 +14,7 @@ import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.attribute.client.ProductAttributeAssignmentClient;
 import ru.stroy1click.web.attribute.dto.ProductAttributeAssignmentDto;
 import ru.stroy1click.web.attribute.dto.ProductAttributeValueFilter;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 
 import java.util.List;
 
@@ -24,9 +25,12 @@ public class ProductAttributeAssignmentClientImpl implements ProductAttributeAss
 
     private final RestClient restClient;
 
-    public ProductAttributeAssignmentClientImpl(@Value("${url.productAttributeAssignment}") String url){
+    public ProductAttributeAssignmentClientImpl(@Value("${url.productAttributeAssignment}") String url,
+                                                TokenLifecycleInterceptor interceptor){
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 

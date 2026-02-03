@@ -29,12 +29,12 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public OrderDto get(@PathVariable("id") Long id){
-        return this.orderClient.get(id, SecurityUtils.getJwt());
+        return this.orderClient.get(id, SecurityUtils.getAccessToken());
     }
 
     @GetMapping("/user")
     public List<OrderDto> getByUserId(@RequestParam("userId") Long userId){
-        return this.orderClient.getByUserId(userId, SecurityUtils.getJwt());
+        return this.orderClient.getByUserId(userId, SecurityUtils.getAccessToken());
     }
 
     @PostMapping
@@ -46,7 +46,7 @@ public class OrderController {
 
         orderDto.setUserId(SecurityUtils.getUserId());
 
-        this.orderClient.create(orderDto, SecurityUtils.getJwt());
+        this.orderClient.create(orderDto, SecurityUtils.getAccessToken());
 
         return ResponseEntity.ok(
                 this.messageSource.getMessage(
