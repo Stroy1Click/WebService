@@ -1,21 +1,35 @@
 package ru.stroy1click.web.security;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUtils {
 
-    public static String getJwt(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
+    public static String getAccessToken(){
+        CustomUserDetails customUserDetails = getCustomUserDetails();
+
         return customUserDetails.getJwtResponse().getAccessToken();
     }
 
+    public static void setAccessToken(String accessToken){
+        CustomUserDetails customUserDetails = getCustomUserDetails();
+
+        customUserDetails.getJwtResponse().setAccessToken(accessToken);
+    }
+
+    public static String getRefreshToken(){
+        CustomUserDetails customUserDetails = getCustomUserDetails();
+
+        return customUserDetails.getJwtResponse().getRefreshToken();
+    }
+
     public static Long getUserId(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetail = (CustomUserDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
+        CustomUserDetails userDetail = getCustomUserDetails();
+
         return userDetail.getUser().getId();
+    }
+
+    private static CustomUserDetails getCustomUserDetails(){
+        return (CustomUserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
     }
 }

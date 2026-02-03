@@ -13,6 +13,7 @@ import ru.stroy1click.web.confirmationcode.client.ConfirmationCodeClient;
 import ru.stroy1click.web.confirmationcode.dto.CodeVerificationRequest;
 import ru.stroy1click.web.confirmationcode.dto.CreateConfirmationCodeRequest;
 import ru.stroy1click.web.confirmationcode.dto.UpdatePasswordRequest;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 
 @Slf4j
 @Service
@@ -21,9 +22,12 @@ public class ConfirmationCodeClientImpl implements ConfirmationCodeClient {
 
     private final RestClient restClient;
 
-    public ConfirmationCodeClientImpl(@Value("${url.confirmationCode}") String url){
+    public ConfirmationCodeClientImpl(@Value("${url.confirmationCode}") String url,
+                                      TokenLifecycleInterceptor interceptor){
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 

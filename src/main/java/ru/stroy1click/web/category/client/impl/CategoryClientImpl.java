@@ -15,6 +15,7 @@ import ru.stroy1click.web.category.client.CategoryClient;
 import ru.stroy1click.web.category.dto.CategoryDto;
 import ru.stroy1click.web.common.exception.ServiceUnavailableException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 import ru.stroy1click.web.subcategory.dto.SubcategoryDto;
 
 import java.io.IOException;
@@ -28,9 +29,12 @@ public class CategoryClientImpl implements CategoryClient {
 
     private final RestClient restClient;
 
-    public CategoryClientImpl(@Value("${url.category}") String url){
+    public CategoryClientImpl(@Value("${url.category}") String url,
+                              TokenLifecycleInterceptor interceptor){
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 

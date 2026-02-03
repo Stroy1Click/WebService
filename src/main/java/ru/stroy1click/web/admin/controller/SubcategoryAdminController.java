@@ -45,8 +45,8 @@ public class SubcategoryAdminController {
         this.imageValidatorUtils.validateImage(image);
 
         try {
-            SubcategoryDto createdSubcategory = this.subcategoryClient.create(subcategoryDto, SecurityUtils.getJwt());
-            this.subcategoryClient.assignImage(createdSubcategory.getId(), image, SecurityUtils.getJwt());
+            SubcategoryDto createdSubcategory = this.subcategoryClient.create(subcategoryDto, SecurityUtils.getAccessToken());
+            this.subcategoryClient.assignImage(createdSubcategory.getId(), image, SecurityUtils.getAccessToken());
         } catch (NotFoundException | AlreadyExistsException e){
             model.addAttribute("error", e.getMessage());
             return "admin/subcategories";

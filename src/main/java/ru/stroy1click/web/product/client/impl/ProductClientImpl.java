@@ -17,6 +17,7 @@ import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.product.client.ProductClient;
 import ru.stroy1click.web.product.dto.ProductDto;
 import ru.stroy1click.web.product.dto.ProductImageDto;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,9 +31,12 @@ public class ProductClientImpl implements ProductClient {
 
     private final RestClient restClient;
 
-    public ProductClientImpl(@Value("${url.product}") String url){
+    public ProductClientImpl(@Value("${url.product}") String url,
+                             TokenLifecycleInterceptor interceptor){
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 

@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.stroy1click.web.common.exception.ServiceUnavailableException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.product.type.dto.ProductTypeDto;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 import ru.stroy1click.web.subcategory.client.SubcategoryClient;
 import ru.stroy1click.web.subcategory.dto.SubcategoryDto;
 
@@ -28,9 +29,12 @@ public class SubcategoryClientImpl implements SubcategoryClient {
 
     private final RestClient restClient;
 
-    public SubcategoryClientImpl(@Value("${url.subcategory}") String url){
+    public SubcategoryClientImpl(@Value("${url.subcategory}") String url,
+                                 TokenLifecycleInterceptor interceptor){
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 

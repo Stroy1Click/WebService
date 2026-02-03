@@ -39,7 +39,7 @@ public class AttributeAdminController {
         }
 
         try {
-            this.attributeClient.create(attributeDto, SecurityUtils.getJwt());
+            this.attributeClient.create(attributeDto, SecurityUtils.getAccessToken());
         } catch (NotFoundException | AlreadyExistsException e){
             model.addAttribute("error", e.getMessage());
             return "admin/attributes";

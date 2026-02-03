@@ -8,7 +8,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.stroy1click.web.common.service.JwtService;
-import ru.stroy1click.web.user.dto.UserDto;
 
 import java.security.Key;
 import java.util.Date;
@@ -29,6 +28,16 @@ public class JwtServiceImpl implements JwtService {
         return createToken(claims);
     }
 
+    @Override
+    public boolean isTokenExpired(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            return claims.getExpiration().before(new Date(System.currentTimeMillis() + 60000));
+        }  catch (Exception e) {
+            return true;
+        }
+    }
+
     private String createToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -40,5 +49,14 @@ public class JwtServiceImpl implements JwtService {
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

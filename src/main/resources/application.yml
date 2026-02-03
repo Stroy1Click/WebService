@@ -2,7 +2,7 @@ spring:
   application:
     name: Web-Service
   profiles:
-    active: prod
+    active: dev
   config:
     import: application-prod.yml
   messages:
@@ -173,7 +173,8 @@ jwt:
 
 url:
   user: http://localhost:8080/api/v1/users
-  auth: http://localhost:9090/api/v1/auth
+  auth: http://localhost:9070/api/v1/auth
+  token: http://localhost:9070/api/v1/tokens
   confirmationCode: http://localhost:6060/api/v1/confirmation-codes
   category: http://localhost:7070/api/v1/categories
   subcategory: http://localhost:7070/api/v1/subcategories

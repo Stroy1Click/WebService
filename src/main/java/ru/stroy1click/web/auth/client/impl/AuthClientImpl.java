@@ -13,6 +13,7 @@ import ru.stroy1click.web.auth.dto.JwtResponse;
 import ru.stroy1click.web.auth.dto.RefreshTokenRequest;
 import ru.stroy1click.web.common.exception.ServiceUnavailableException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 import ru.stroy1click.web.user.dto.UserDto;
 
 @Slf4j
@@ -22,9 +23,12 @@ public class AuthClientImpl implements AuthClient {
 
     private final RestClient restClient;
 
-    public AuthClientImpl(@Value("${url.auth}") String url) {
+    public AuthClientImpl(@Value("${url.auth}") String url,
+                          TokenLifecycleInterceptor interceptor) {
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 

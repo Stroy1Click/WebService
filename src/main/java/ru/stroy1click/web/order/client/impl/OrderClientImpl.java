@@ -11,6 +11,7 @@ import ru.stroy1click.web.common.exception.ServiceUnavailableException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.order.client.OrderClient;
 import ru.stroy1click.web.order.dto.OrderDto;
+import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 
 import java.util.List;
 
@@ -20,9 +21,12 @@ public class OrderClientImpl implements OrderClient {
 
     private final RestClient restClient;
 
-    public OrderClientImpl(@Value("${url.order}") String url){
+    public OrderClientImpl(@Value("${url.order}") String url,
+                           TokenLifecycleInterceptor interceptor){
         this.restClient = RestClient.builder()
                 .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
                 .build();
     }
 
