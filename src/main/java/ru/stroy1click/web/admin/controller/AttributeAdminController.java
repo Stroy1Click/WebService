@@ -9,8 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.stroy1click.web.attribute.client.AttributeClient;
 import ru.stroy1click.web.attribute.dto.AttributeDto;
-import ru.stroy1click.web.common.exception.AlreadyExistsException;
-import ru.stroy1click.web.common.exception.NotFoundException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.security.SecurityUtils;
 
@@ -42,6 +41,18 @@ public class AttributeAdminController {
             this.attributeClient.create(attributeDto, SecurityUtils.getAccessToken());
         } catch (NotFoundException | AlreadyExistsException e){
             model.addAttribute("error", e.getMessage());
+            return "admin/attributes";
+        }
+
+        return "redirect:/admin/attributes";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@ModelAttribute("id") Integer id, Model model){
+        try {
+            this.attributeClient.delete(id, SecurityUtils.getAccessToken());
+        } catch (NotFoundException e){
+            model.addAttribute("notFoundError", e.getMessage());
             return "admin/attributes";
         }
 

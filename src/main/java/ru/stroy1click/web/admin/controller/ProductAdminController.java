@@ -7,8 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.stroy1click.web.common.exception.AlreadyExistsException;
-import ru.stroy1click.web.common.exception.NotFoundException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ImageValidatorUtils;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.product.client.ProductClient;
@@ -42,6 +41,7 @@ public class ProductAdminController {
             model.addAttribute("error", ValidationErrorUtils.collectErrorsToString(bindingResult.getFieldErrors()));
             return "admin/products";
         }
+
         this.imageValidatorUtils.validateImages(images);
 
         try {
@@ -53,5 +53,12 @@ public class ProductAdminController {
         }
 
         return "redirect:/admin/products";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@ModelAttribute("id") Integer id){
+        this.productClient.delete(id, SecurityUtils.getAccessToken());
+
+        return "redirect:/admin/product-types";
     }
 }

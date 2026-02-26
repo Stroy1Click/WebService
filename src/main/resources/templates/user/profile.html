@@ -32,21 +32,20 @@
     </div>
 
     <div class="header-actions">
-        <div class="action-btn cart-btn">
+        <a href="/cart" class="action-btn cart-btn">
             <svg viewBox="0 0 24 24">
                 <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
             </svg>
-            <a href="/cart" class="btn-text">Корзина</a>
-        </div>
+            <span class="btn-text">Корзина</span>
+        </a>
 
-        <div class="action-btn profile-btn">
+        <a href="/user/profile" class="action-btn profile-btn">
             <svg viewBox="0 0 24 24">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
-            <a href="/user/profile" class="btn-text">Профиль</a>
-        </div>
+            <span class="btn-text">Профиль</span>
+        </a>
     </div>
-
     <div class="burger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
     </div>
@@ -82,8 +81,7 @@
         </div>
     </div>
 
-    <!-- ===== ЗАКАЗЫ ===== -->
-    <div class="orders-card">
+    <div class="orders-card" th:if="${orders}">
         <h2>Мои заказы</h2>
 
         <!-- контейнер для массива заказов -->
@@ -113,26 +111,68 @@
 
                 <div class="order-row">
                     <span>Статус заказа:</span>
-                    <strong th:text="${order.getOrderStatus()}"></strong>
+                    <strong th:text="${order.getOrderStatus().getTitle()}"></strong>
                 </div>
 
                 <div class="order-row">
                     <span>Указанный контактный телефон:</span>
                     <strong th:text="${order.getContactPhone()}"></strong>
                 </div>
+
+                <div class="order-row">
+                    <span>Указанное контактное лицо:</span>
+                    <strong th:text="${order.getContactName()}"></strong>
+                </div>
+
+                <div class="order-row">
+                    <span>Указанная электронная почта:</span>
+                    <strong th:text="${order.getContactEmail()}"></strong>
+                </div>
+
+                <div class="order-row">
+                    <span>Указанное название компании</span>
+                    <strong th:text="${order.getLegalName()}"></strong>
+                </div>
             </div>
 
         </div>
-
-        <!-- если заказов нет -->
-        <p class="empty" id="emptyOrders" style="display:none;">
-            У вас пока нет заказов
-        </p>
 
         <form th:action="@{/logout}" th:method="POST">
             <input class="btn-text" type="submit" value="Выйти из аккаунта" />
         </form>
     </div>
+
+    <div class="orders-card" th:if="${noOrders}">
+        <p class="empty" id="emptyOrders" style="display:none;" >
+            У вас пока нет заказов
+        </p>
+    </div>
+
+    <div class="orders-card" th:if="${documents}">
+        <h2>Мои заказы</h2>
+
+        <div id="documentsList">
+
+            <div class="order" th:each="document : ${documents}">
+                <div class="order-row">
+                    <span>Ссылка на скачивание</span>
+                    <a th:href="@{/api/v1/storage/documents/{link}(link=${document.link})}"
+                       th:text="${document.link}"></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="orders-card" th:if="${noDocuments}">
+            <p class="empty" id="emptyDocuments" style="display:none;" >
+                У вас пока документов
+            </p>
+        </div>
+    </div>
+
+    <form th:action="@{/logout}" th:method="POST">
+        <input class="btn-text" type="submit" value="Выйти из аккаунта" />
+    </form>
 
 </div>
 

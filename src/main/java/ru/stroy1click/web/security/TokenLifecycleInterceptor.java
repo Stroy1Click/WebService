@@ -2,14 +2,18 @@ package ru.stroy1click.web.security;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.modelmapper.ValidationException;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import ru.stroy1click.common.exception.NotFoundException;
+import ru.stroy1click.common.service.JwtService;
 import ru.stroy1click.web.auth.client.TokenClient;
 import ru.stroy1click.web.auth.dto.RefreshTokenRequest;
-import ru.stroy1click.web.common.service.JwtService;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,11 +40,16 @@ public class TokenLifecycleInterceptor implements ClientHttpRequestInterceptor {
             if(isJwtExpired){
                 RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest(SecurityUtils.getRefreshToken());
 
-                String updatedToken = this.tokenClient.refreshAccessToken(refreshTokenRequest).getAccessToken();
+                try {
+                    String updatedToken = this.tokenClient.refreshAccessToken(refreshTokenRequest).getAccessToken();
 
-                request.getHeaders().setBearerAuth(updatedToken);
+                    request.getHeaders().setBearerAuth(updatedToken);
+                    SecurityUtils.setAccessToken(updatedToken);
+                } catch (NotFoundException | ValidationException e) {
+                    SecurityContextHolder.clearContext();
 
-                SecurityUtils.setAccessToken(updatedToken);
+                    throw new CredentialsExpiredException("Session expired");
+                }
             }
         }
 

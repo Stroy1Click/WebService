@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import ru.stroy1click.web.common.exception.ValidationException;
+import ru.stroy1click.common.exception.*;
 
 import java.util.List;
 import java.util.Locale;

@@ -5,12 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import ru.stroy1click.web.common.exception.AlreadyExistsException;
-import ru.stroy1click.web.common.exception.NotFoundException;
+import org.springframework.web.bind.annotation.*;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.attribute.client.ProductAttributeAssignmentClient;
 import ru.stroy1click.web.attribute.dto.ProductAttributeAssignmentDto;
@@ -48,5 +44,12 @@ public class ProductAttributeAssignmentAdminController {
         }
 
         return "redirect:/admin/product-attribute-assignments";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@ModelAttribute("id") Integer id){
+        this.productAttributeAssignmentClient.delete(id, SecurityUtils.getAccessToken());
+
+        return "redirect:/admin/product-types";
     }
 }

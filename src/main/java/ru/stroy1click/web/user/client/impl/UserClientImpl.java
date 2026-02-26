@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
-import ru.stroy1click.web.common.exception.ServiceUnavailableException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 import ru.stroy1click.web.user.client.UserClient;
@@ -88,7 +88,7 @@ public class UserClientImpl implements UserClient {
         log.info("getByEmail {}", email);
         try {
             return this.restClient.get()
-                    .uri("/email?email={email}",email)
+                    .uri("?email={email}" ,email)
                     .header("Authorization", "Bearer " + jwt)                    .retrieve()
                     .onStatus(HttpStatusCode::isError,(request, response) -> {
                         ValidationErrorUtils.validateAuthenticationStatus(response);

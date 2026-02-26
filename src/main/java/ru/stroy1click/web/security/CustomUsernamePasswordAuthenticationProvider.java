@@ -18,11 +18,15 @@ public class CustomUsernamePasswordAuthenticationProvider implements Authenticat
 
     private final AuthClient authClient;
 
+    private final CustomUserDetailsChecker customUserDetailsChecker;
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         CustomUserDetails userDetails = (CustomUserDetails) this.customUserDetailsService.loadUserByUsername(username);
+
+        this.customUserDetailsChecker.check(userDetails);
 
         JwtResponse jwtResponse = this.authClient.login(new AuthRequest(username, password));
         userDetails.setJwtResponse(jwtResponse);

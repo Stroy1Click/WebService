@@ -13,7 +13,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 import ru.stroy1click.web.category.client.CategoryClient;
 import ru.stroy1click.web.category.dto.CategoryDto;
-import ru.stroy1click.web.common.exception.ServiceUnavailableException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.security.TokenLifecycleInterceptor;
 import ru.stroy1click.web.subcategory.dto.SubcategoryDto;

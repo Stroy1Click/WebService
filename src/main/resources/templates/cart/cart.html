@@ -12,7 +12,7 @@
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
         h1 { margin-bottom: 30px; }
 
-        /* Список товаров */
+        /* Список товаров  */
         .cart-list { background: #2f3e2d; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
         .cart-item { display: flex; align-items: center; gap: 20px; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .cart-item:last-child { border-bottom: none; }
@@ -97,9 +97,57 @@
         <h2>Оформление заказа</h2>
         <div class="total-price">Итого: <span id="cartTotal">0</span> ₽</div>
 
+        <!-- 🔹 Данные организации -->
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <h3 style="font-size: 16px; margin-top: 0; color: #d9f2c4;">Данные организации</h3>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px;">Форма</label>
+                    <select id="legalFormInput">
+                        <option value="LLC">ООО</option>
+                        <option value="IE">ИП</option>
+                    </select>
+                </div>
+
+                <div style="flex: 3;">
+                    <label style="font-size: 12px;">Наименование</label>
+                    <input type="text" id="legalNameInput" placeholder="ООО СтройСнаб">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px;">ИНН</label>
+                    <input type="text" id="innInput" placeholder="10 или 12 цифр">
+                </div>
+
+                <div style="flex: 1;">
+                    <label style="font-size: 12px;">КПП (для ООО)</label>
+                    <input type="text" id="kppInput" placeholder="9 цифр">
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔹 Контактные данные -->
         <div class="form-group">
-            <label>Ваш телефон (+7...)</label>
+            <label>Контактное лицо</label>
+            <input type="text" id="contactNameInput" placeholder="Иванов Иван Иванович">
+        </div>
+
+        <div class="form-group">
+            <label>Телефон (+7...)</label>
             <input type="text" id="phoneInput" placeholder="+79990000000" value="+7">
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="emailInput" placeholder="example@mail.ru">
+        </div>
+
+        <div class="form-group">
+            <label>Адрес доставки</label>
+            <input type="text" id="addressInput" placeholder="г. Владивосток, ул...">
         </div>
 
         <div class="form-group">
@@ -157,20 +205,28 @@
     }
 
     function submitOrder() {
-        const phone = document.getElementById('phoneInput').value;
-        const notes = document.getElementById('notesInput').value;
-        // В реальном проекте ID юзера берется из токена/куки
-        // Пока хардкод или поле ввода, если нужно тестировать
-        const userId = 1;
 
-        // Валидация телефона (простая)
+        const orderData = {
+            userId: document.getElementById('userIdInput').value,
+            legalForm: document.getElementById('legalFormInput').value,
+            legalName: document.getElementById('legalNameInput').value,
+            inn: document.getElementById('innInput').value,
+            kpp: document.getElementById('kppInput').value,
+            contactName: document.getElementById('contactNameInput').value,
+            contactPhone: document.getElementById('phoneInput').value,
+            contactEmail: document.getElementById('emailInput').value,
+            deliveryAddress: document.getElementById('addressInput').value,
+            notes: document.getElementById('notesInput').value
+        };
+
+        // Простая валидация телефона
         const phoneRegex = /^(\+7|8)\d{10}$/;
-        if (!phoneRegex.test(phone)) {
+        if (!phoneRegex.test(orderData.contactPhone)) {
             alert('Введите корректный номер телефона: +79991234567');
             return;
         }
 
-        CartService.checkout(phone, notes, userId);
+        CartService.checkout(orderData);
     }
 
     // Запуск при загрузке

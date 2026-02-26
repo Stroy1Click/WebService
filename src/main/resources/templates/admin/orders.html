@@ -68,14 +68,33 @@
 
             <div class="order-info-grid">
                 <div class="info-item">
-                    <label>Телефон клиента</label>
-                    <span th:text="${order.contactPhone}"></span>
+                    <label>Компания</label>
+                    <span th:text="${order.legalForm} + ' &quot;' + ${order.legalName} + '&quot;'"></span>
                 </div>
+
+                <div class="info-item">
+                    <label>ИНН / КПП</label>
+                    <span th:text="${order.inn} + (${order.kpp != null and !order.kpp.isEmpty()} ? ' / ' + ${order.kpp} : '')"></span>
+                </div>
+
+                <div class="info-item">
+                    <label>Контактное лицо</label>
+                    <span th:text="${order.contactName} + ' (' + ${order.contactPhone} + ')'"></span>
+                </div>
+
+                <div class="info-item">
+                    <label>Email</label>
+                    <span th:text="${order.contactEmail}"></span>
+                </div>
+
+                <div class="info-item">
+                    <label>Адрес доставки</label>
+                    <span th:text="${order.deliveryAddress}"></span>
+                </div>
+
                 <div class="info-item">
                     <label>Дата создания</label>
-                    <span th:text="${#temporals.format(order.createdAt, 'dd MMMM HH:mm')}">
-
-                    </span>
+                    <span th:text="${order.createdAt != null ? #temporals.format(order.createdAt, 'dd MMMM HH:mm') : 'Не указана'}"></span>
                 </div>
             </div>
 

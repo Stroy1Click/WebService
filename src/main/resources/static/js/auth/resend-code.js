@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('confirmationForm'); // Исправлено на ID из твоего HTML
+    const form = document.getElementById('confirmationForm');
 
     if (!form) {
         console.error("Форма с id='confirmationForm' не найдена!");
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const csrfToken = document.getElementById('csrfToken')?.value;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const typeParam = urlParams.get('type') || 'REGISTRATION';
+    const typeParam = urlParams.get('type') || 'EMAIL';
 
     const savedEmail = localStorage.getItem('user_email');
     if (savedEmail && emailInput) {

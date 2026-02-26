@@ -9,7 +9,7 @@ import org.springframework.web.client.RestClient;
 import ru.stroy1click.web.auth.client.TokenClient;
 import ru.stroy1click.web.auth.dto.JwtResponse;
 import ru.stroy1click.web.auth.dto.RefreshTokenRequest;
-import ru.stroy1click.web.common.exception.ServiceUnavailableException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 
 @Slf4j

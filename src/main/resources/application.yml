@@ -39,8 +39,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       attributeClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -51,8 +51,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       attributeOptionClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -63,8 +63,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       productAttributeAssignmentClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -75,8 +75,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       userClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -87,8 +87,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       categoryClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -99,8 +99,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       subcategoryClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -111,8 +111,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       productTypeClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -123,8 +123,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       productClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -135,8 +135,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       confirmationCodeClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -147,8 +147,8 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
       searchClient:
         registerHealthIndicator: true
         slidingWindowType: COUNT_BASED
@@ -159,13 +159,13 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         ignore-exceptions:
-          - ru.stroy1click.web.common.exception.NotFoundException
-          - ru.stroy1click.web.common.exception.ValidationException
+          - ru.stroy1click.common.exception.NotFoundException
+          - ru.stroy1click.common.exception.ValidationException
 
 server:
   servlet:
     session:
-      timeout: 72h
+      timeout: 336h
   port: 3035
 
 jwt:
@@ -183,7 +183,9 @@ url:
   attribute: http://localhost:4040/api/v1/attributes
   attributeOption: http://localhost:4040/api/v1/attribute-options
   productAttributeAssignment: http://localhost:4040/api/v1/product-attribute-assignments
-  storage: http://localhost:7070/api/v1/storage
+  catalogStorage: http://localhost:7070/api/v1/storage
   order: http://localhost:1010/api/v1/orders
   notification: http://localhost:2020/api/v1/notifications
   search: http://localhost:4045/api/v1/search
+  document: http://localhost:6065/api/v1/documents
+  documentStorage: http://localhost:6065/api/v1/storage

@@ -5,15 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.stroy1click.web.attribute.dto.AttributeOptionDto;
-import ru.stroy1click.web.common.exception.AlreadyExistsException;
-import ru.stroy1click.web.common.exception.NotFoundException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
-import ru.stroy1click.web.attribute.client.AttributeOption;
+import ru.stroy1click.web.attribute.client.AttributeOptionClient;
 import ru.stroy1click.web.security.SecurityUtils;
 
 @Controller
@@ -21,12 +17,12 @@ import ru.stroy1click.web.security.SecurityUtils;
 @RequiredArgsConstructor
 public class AttributeOptionAdminController {
 
-    private final AttributeOption attributeOption;
+    private final AttributeOptionClient attributeOptionClient;
 
     @GetMapping
     public String productAttributesPage(Model model){
         model.addAttribute("attributeOptionDto", new AttributeOptionDto());
-        model.addAttribute("attributeOptions", this.attributeOption.getAll());
+        model.addAttribute("attributeOptions", this.attributeOptionClient.getAll());
 
         return "admin/attribute-options";
     }
@@ -41,12 +37,23 @@ public class AttributeOptionAdminController {
         }
 
         try {
-            this.attributeOption.create(attributeOptionDto, SecurityUtils.getAccessToken());
+            this.attributeOptionClient.create(attributeOptionDto, SecurityUtils.getAccessToken());
         } catch (NotFoundException | AlreadyExistsException e){
             model.addAttribute("error", e.getMessage());
             return "admin/attribute-options";
         }
 
+        return "redirect:/admin/attribute-options";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@ModelAttribute("id") Integer id, Model model){
+        try {
+            this.attributeOptionClient.delete(id, SecurityUtils.getAccessToken());
+        } catch (NotFoundException e){
+            model.addAttribute("error", e.getMessage());
+            return "admin/attribute-options";
+        }
         return "redirect:/admin/attribute-options";
     }
 }

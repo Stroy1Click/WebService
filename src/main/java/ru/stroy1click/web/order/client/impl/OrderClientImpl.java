@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
-import ru.stroy1click.web.common.exception.ServiceUnavailableException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.order.client.OrderClient;
 import ru.stroy1click.web.order.dto.OrderDto;
@@ -35,7 +35,7 @@ public class OrderClientImpl implements OrderClient {
         log.info("getByUserId {}", userId);
         try {
             return this.restClient.get()
-                    .uri("/user?userId={userId}", userId)
+                    .uri("?userId={userId}", userId)
                     .header("Authorization", "Bearer " + jwt)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, ((request, response) -> {
@@ -45,7 +45,7 @@ public class OrderClientImpl implements OrderClient {
                     });
         } catch (ResourceAccessException e){
             log.info("get error ", e);
-            throw new ServiceUnavailableException(e.getMessage());
+            throw new ServiceUnavailableException(e);
         }
     }
 

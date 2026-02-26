@@ -1,4 +1,3 @@
-
 const CART_KEY = 'stroy1click_cart';
 
 const CartService = {
@@ -18,8 +17,9 @@ const CartService = {
             cart.push({
                 id: product.id,
                 title: product.title,
-                price: product.price,
+                unit: product.unit,
                 image: product.image,
+                price: product.price,
                 quantity: quantity
             });
         }
@@ -37,19 +37,24 @@ const CartService = {
         if (window.location.pathname.includes('cart')) {
             renderCartPage();
         }
+
         this.updateCartBadge();
     },
 
     updateQuantity(productId, newQuantity) {
         const cart = this.getCart();
         const item = cart.find(i => i.id === productId);
+
         if (item) {
             item.quantity = parseInt(newQuantity);
+
             if (item.quantity <= 0) {
                 this.removeFromCart(productId);
                 return;
             }
+
             localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
             if (window.location.pathname.includes('cart')) {
                 renderCartPage();
             }
@@ -65,13 +70,16 @@ const CartService = {
         const cart = this.getCart();
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
         const badge = document.querySelector('.cart-badge');
+
         if (badge) {
             badge.innerText = totalItems;
             badge.style.display = totalItems > 0 ? 'inline-block' : 'none';
         }
     },
 
-    async checkout(contactPhone, notes, userId) {
+    // 🔥 ГЛАВНЫЙ МЕТОД ОФОРМЛЕНИЯ
+    async checkout(orderData) {
+
         const cart = this.getCart();
 
         if (cart.length === 0) {
@@ -80,37 +88,57 @@ const CartService = {
         }
 
         const orderItems = cart.map(item => ({
-            productId: item.id,
-            quantity: item.quantity
+            productId: item.id, // В DTO это Integer, отправляем число
+            productTitle: item.title,
+            quantity: item.quantity,
+            unit: item.unit
+            // Поле price мы здесь намеренно не передаем,
+            // бэкенд должен рассчитать его сам на основе productId
         }));
 
-        const orderDto = {
-            userId: userId,
-            contactPhone: contactPhone,
-            notes: notes || "",
-            orderStatus: "CREATED",
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            orderItems: orderItems
+        // Маппинг формы
+        const legalFormMap = {
+            "ООО": "LLC",
+            "ИП": "IE",
+            "LLC": "LLC",
+            "IE": "IE"
         };
+
+        const normalizedLegalForm =
+            legalFormMap[orderData.legalForm?.trim().toUpperCase()] || "LLC";
+
+        const orderDto = {
+            userId: parseInt(orderData.userId),
+            legalName: orderData.legalName,
+            legalForm: normalizedLegalForm,
+            notes: orderData.notes || "",
+            deliveryAddress: orderData.deliveryAddress,
+            inn: orderData.inn,
+            kpp: orderData.kpp || null,
+            orderStatus: "CREATED",
+            orderItems: orderItems,
+            contactName: orderData.contactName,
+            contactPhone: orderData.contactPhone,
+            contactEmail: orderData.contactEmail
+        };
+
+        console.log("ORDER DTO:", orderDto);
 
         try {
             const response = await fetch('/api/v1/orders', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderDto)
             });
 
             if (response.ok) {
-                alert("Заказ успешно оформлен!");
+                alert("Заказ успешно оформлен! Наш менеджер свяжется с вами.");
                 this.clearCart();
                 window.location.href = '/';
             } else {
                 const errorData = await response.json();
                 console.error("Ошибка заказа:", errorData);
-                alert("Ошибка при оформлении: " + (errorData.message || "Проверьте данные"));
+                alert("Ошибка: " + (errorData.message || "Проверьте заполнение формы"));
             }
         } catch (e) {
             console.error(e);

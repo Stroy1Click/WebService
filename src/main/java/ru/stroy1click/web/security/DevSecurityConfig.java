@@ -6,10 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsChecker;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +24,8 @@ import org.springframework.security.web.authentication.password.HaveIBeenPwnedRe
 public class DevSecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+
+    private final RefreshTokenLogoutHandler refreshTokenLogoutHandler;
 
     @Bean
     @Order(1)
@@ -70,6 +74,7 @@ public class DevSecurityConfig {
                         .failureUrl("/account/login?error"))
                 .logout(logout ->
                         logout.logoutUrl("/logout")
+                                .addLogoutHandler(this.refreshTokenLogoutHandler)
                                 .logoutSuccessUrl("/account/login"));
 
         return http.build();
@@ -85,6 +90,10 @@ public class DevSecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    @Bean
+    public UserDetailsChecker userDetailsChecker() {
+        return new AccountStatusUserDetailsChecker();
+    }
 
     @Bean
     public CompromisedPasswordChecker compromisedPasswordChecker() {
