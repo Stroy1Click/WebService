@@ -28,7 +28,7 @@ public class AuthController {
                 ValidationErrorUtils.collectErrorsToString(bindingResult.getFieldErrors())
         );
 
-        userDto.setEmailConfirmed(false);
+        userDto.setIsEmailConfirmed(false);
         this.authClient.registration(userDto);
         return ResponseEntity.ok(
                 this.messageSource.getMessage(
