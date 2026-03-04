@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.stroy1click.web.common.exception.ValidationException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.confirmationcode.client.ConfirmationCodeClient;
 import ru.stroy1click.web.confirmationcode.dto.CodeVerificationRequest;

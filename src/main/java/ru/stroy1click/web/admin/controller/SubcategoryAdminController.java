@@ -7,8 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.stroy1click.web.common.exception.AlreadyExistsException;
-import ru.stroy1click.web.common.exception.NotFoundException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ImageValidatorUtils;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.security.SecurityUtils;
@@ -51,6 +50,13 @@ public class SubcategoryAdminController {
             model.addAttribute("error", e.getMessage());
             return "admin/subcategories";
         }
+
+        return "redirect:/admin/subcategories";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@ModelAttribute("id") Integer id){
+        this.subcategoryClient.delete(id, SecurityUtils.getAccessToken());
 
         return "redirect:/admin/subcategories";
     }

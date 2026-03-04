@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
-import ru.stroy1click.web.common.exception.ServiceUnavailableException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.dto.PageResponse;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.attribute.client.ProductAttributeAssignmentClient;

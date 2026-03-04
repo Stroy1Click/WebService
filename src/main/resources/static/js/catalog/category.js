@@ -6,7 +6,7 @@ async function fetchCategories() {
     const gridContainer = document.querySelector('.grid');
 
     const API_URL = '/api/v1/categories';
-    const STORAGE_URL = '/api/v1/storage';
+    const STORAGE_URL = '/api/v1/storage/catalog';
 
     try {
         const response = await fetch(API_URL);

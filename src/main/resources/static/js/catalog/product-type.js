@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchProductTypes(subcategoryId, container) {
     const API_URL = `/api/v1/subcategories/${subcategoryId}/product-types`;
-    const STORAGE_URL = '/api/v1/storage';
+    const STORAGE_URL = '/api/v1/storage/catalog';
 
     try {
         const response = await fetch(API_URL);

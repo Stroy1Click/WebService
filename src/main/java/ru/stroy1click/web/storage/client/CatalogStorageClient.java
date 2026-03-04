@@ -1,6 +1,6 @@
 package ru.stroy1click.web.storage.client;
 
-public interface StorageClient {
+public interface CatalogStorageClient {
 
     byte[] downloadImage(String link);
 }

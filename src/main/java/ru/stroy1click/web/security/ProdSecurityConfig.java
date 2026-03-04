@@ -23,6 +23,8 @@ public class ProdSecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
 
+    private final RefreshTokenLogoutHandler refreshTokenLogoutHandler;
+
     @Bean
     @Order(1)
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
@@ -70,7 +72,8 @@ public class ProdSecurityConfig {
                         .failureUrl("/account/login?error"))
                 .logout(logout ->
                         logout.logoutUrl("/logout")
-                                .logoutSuccessUrl("/account/login"));
+                                .logoutSuccessUrl("/account/login")
+                                .addLogoutHandler(this.refreshTokenLogoutHandler));
 
         return http.build();
     }

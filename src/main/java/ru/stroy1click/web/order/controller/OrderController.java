@@ -7,12 +7,14 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.stroy1click.web.common.exception.ValidationException;
+import ru.stroy1click.common.exception.ValidationException;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.order.client.OrderClient;
 import ru.stroy1click.web.order.dto.OrderDto;
+import ru.stroy1click.web.product.client.ProductClient;
 import ru.stroy1click.web.security.SecurityUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +28,7 @@ public class OrderController {
 
     private final OrderClient orderClient;
 
+    private final ProductClient productClient;
 
     @GetMapping("/{id}")
     public OrderDto get(@PathVariable("id") Long id){
@@ -45,6 +48,11 @@ public class OrderController {
         ));
 
         orderDto.setUserId(SecurityUtils.getUserId());
+
+        orderDto.getOrderItems().forEach(orderItemDto -> {
+            BigDecimal price = this.productClient.get(orderItemDto.getProductId()).getPrice();
+            orderItemDto.setPrice(price);
+        });
 
         this.orderClient.create(orderDto, SecurityUtils.getAccessToken());
 

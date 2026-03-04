@@ -7,7 +7,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
-import ru.stroy1click.web.common.exception.*;
+import ru.stroy1click.common.exception.*;
 
 import java.io.IOException;
 import java.util.List;

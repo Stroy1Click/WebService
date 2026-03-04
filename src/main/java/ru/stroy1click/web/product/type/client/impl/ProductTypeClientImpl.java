@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
-import ru.stroy1click.web.common.exception.ServiceUnavailableException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.product.type.client.ProductTypeClient;
 import ru.stroy1click.web.product.type.dto.ProductTypeDto;

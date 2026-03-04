@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.stroy1click.web.category.client.CategoryClient;
 import ru.stroy1click.web.category.dto.CategoryDto;
-import ru.stroy1click.web.common.exception.AlreadyExistsException;
-import ru.stroy1click.web.common.exception.NotFoundException;
+import ru.stroy1click.common.exception.*;
 import ru.stroy1click.web.common.util.ImageValidatorUtils;
 import ru.stroy1click.web.common.util.ValidationErrorUtils;
 import ru.stroy1click.web.security.SecurityUtils;
@@ -50,6 +49,13 @@ public class CategoryAdminController {
             model.addAttribute("error", e.getMessage());
             return "admin/categories";
         }
+
+        return "redirect:/admin/categories";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@ModelAttribute("id") Integer id){
+        this.categoryClient.delete(id, SecurityUtils.getAccessToken());
 
         return "redirect:/admin/categories";
     }

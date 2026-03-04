@@ -1,6 +1,7 @@
 package ru.stroy1click.web.security;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import ru.stroy1click.web.user.dto.Role;
 
 public class SecurityUtils {
 
@@ -26,6 +27,18 @@ public class SecurityUtils {
         CustomUserDetails userDetail = getCustomUserDetails();
 
         return userDetail.getUser().getId();
+    }
+
+    public static String getEmail(){
+        CustomUserDetails userDetail = getCustomUserDetails();
+
+        return userDetail.getUser().getEmail();
+    }
+
+    public static Role getRole(){
+        CustomUserDetails userDetail = getCustomUserDetails();
+
+        return userDetail.getUser().getRole();
     }
 
     private static CustomUserDetails getCustomUserDetails(){

@@ -45,6 +45,7 @@ public class OrderAdminController {
 
         return "redirect:/admin/orders/" + id;
     }
+
     @GetMapping("/new")
     public String newOrderPage(){
         return "admin/new-orders";
