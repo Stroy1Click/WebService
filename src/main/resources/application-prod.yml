@@ -7,6 +7,14 @@ spring:
   messages:
     basename: messages
     encoding: UTF-8
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 10MB
+      enabled: true
+  threads:
+    virtual:
+      enabled: true
 
 management:
   health:
