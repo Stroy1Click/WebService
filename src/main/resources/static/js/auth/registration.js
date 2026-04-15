@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 lastName: form.querySelector('input[name="lastName"]').value.trim(),
                 email: form.querySelector('input[name="email"]').value.trim(),
                 password: passwordInput.value,
-                emailConfirmed: false,
+                isEmailConfirmed: false,
                 role: 'ROLE_USER'
             };
 
