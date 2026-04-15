@@ -6,8 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.stroy1click.web.common.exception.NotFoundException;
-import ru.stroy1click.web.common.exception.ValidationException;
+import ru.stroy1click.common.exception.*;
 
 import java.util.Locale;
 
@@ -36,6 +35,19 @@ public class RestAdviceController {
         problemDetail.setTitle(
                 this.messageSource.getMessage(
                         "error.title.validation",
+                        null,
+                        Locale.getDefault()
+                )
+        );
+        return problemDetail;
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ProblemDetail problemDetail(AlreadyExistsException exception){
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        problemDetail.setTitle(
+                this.messageSource.getMessage(
+                        "error.title.already_exist",
                         null,
                         Locale.getDefault()
                 )

@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
     <title>Товары</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/icon.ico}" href="../../static/images/icon.png">
     <link rel="stylesheet" href="../../static/css/catalog/product.css" th:href="@{/css/catalog/product.css}">
 </head>
 <body>
@@ -46,6 +47,7 @@
                 <div class="view-toggle">
                     <button id="gridBtn" class="active">Grid</button>
                     <button id="listBtn">List</button>
+                    <button class="add-to-cart-btn">В корзину</button>
                 </div>
             </div>
         </div>
@@ -74,7 +76,7 @@
     </div>
 </footer>
 
-<script th:src="@{/js/catalog/product.js}"></script>
+<script th:src="@{/js/catalog/products.js}"></script>
 
 <script>
     // Мобильный сайдбар

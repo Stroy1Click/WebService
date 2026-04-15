@@ -1,0 +1,123 @@
+package ru.stroy1click.domain.attribute.client.impl;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClient;
+import ru.stroy1click.domain.attribute.client.AttributeClient;
+import ru.stroy1click.domain.attribute.dto.AttributeDto;
+import ru.stroy1click.common.exception.*;
+import ru.stroy1click.domain.common.util.ValidationErrorUtils;
+import ru.stroy1click.infrastructure.security.TokenLifecycleInterceptor;
+
+import java.util.List;
+
+@Slf4j
+@Service
+@CircuitBreaker(name = "attributeClient")
+public class AttributeClientImpl implements AttributeClient {
+
+    private final RestClient restClient;
+
+    public AttributeClientImpl(@Value("${url.attribute}") String url,
+                               TokenLifecycleInterceptor interceptor){
+        this.restClient = RestClient.builder()
+                .baseUrl(url)
+                .requestInterceptors(clientHttpRequestInterceptors ->
+                        clientHttpRequestInterceptors.addFirst(interceptor))
+                .build();
+    }
+
+    @Override
+    public AttributeDto get(Integer id) {
+        log.info("get {}", id);
+        try {
+            return this.restClient.get()
+                    .uri("/{id}", id)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, (request, response) -> {
+                        ValidationErrorUtils.validateStatus(response);
+                    })
+                    .body(AttributeDto.class);
+        } catch (ResourceAccessException e) {
+            log.error("get error ", e);
+            throw new ServiceUnavailableException();
+        }
+    }
+
+    @Override
+    public AttributeDto create(AttributeDto dto, String jwt) {
+        log.info("create {}", dto);
+        try {
+            return this.restClient.post()
+                    .header("Authorization", "Bearer " + jwt)
+                    .body(dto)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, (request, response) -> {
+                        ValidationErrorUtils.validateStatus(response);
+                    })
+                    .body(AttributeDto.class);
+        } catch (ResourceAccessException e) {
+            log.error("get error ", e);
+            throw new ServiceUnavailableException();
+        }
+    }
+
+    @Override
+    public void update(Integer id, AttributeDto dto, String jwt) {
+        log.info("update {}, {}", id, dto);
+        try {
+            this.restClient.patch()
+                    .uri("/{id}", id)
+                    .header("Authorization", "Bearer " + jwt)
+                    .body(dto)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, (request, response) -> {
+                        ValidationErrorUtils.validateStatus(response);
+                    })
+                    .body(String.class);
+        } catch (ResourceAccessException e) {
+            log.error("get error ", e);
+            throw new ServiceUnavailableException();
+        }
+    }
+
+    @Override
+    public void delete(Integer id, String jwt) {
+        log.info("delete {}", id);
+        try {
+            this.restClient.delete()
+                    .uri("/{id}", id)
+                    .header("Authorization", "Bearer " + jwt)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, (request, response) -> {
+                        ValidationErrorUtils.validateStatus(response);
+                    })
+                    .body(String.class);
+        } catch (ResourceAccessException e) {
+            log.error("get error ", e);
+            throw new ServiceUnavailableException();
+        }
+    }
+
+    @Override
+    public List<AttributeDto> getAll() {
+        log.info("getAll");
+        try {
+            return this.restClient.get()
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, (request, response) -> {
+                        ValidationErrorUtils.validateStatus(response);
+                    })
+                    .body(new ParameterizedTypeReference<>() {
+                    });
+        } catch (ResourceAccessException e) {
+            log.error("get error ", e);
+            throw new ServiceUnavailableException();
+        }
+    }
+}

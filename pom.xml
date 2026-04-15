@@ -8,11 +8,11 @@
         <version>3.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.cerberus</groupId>
-    <artifactId>Stroy1Click-WebService</artifactId>
+    <groupId>ru.stroy1click</groupId>
+    <artifactId>web-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Stroy1Click - WebService</name>
-    <description>Stroy1Click - WebService</description>
+    <name>WebService</name>
+    <description>Основное веб-приложение системы: BFF на Spring Boot и Frontend на JS</description>
     <url/>
     <licenses>
         <license/>
@@ -33,6 +33,7 @@
         <docker.image.prefix>stroy1click</docker.image.prefix>
         <docker.image.name>web</docker.image.name>
         <docker-maven-plugin.version>0.45.0</docker-maven-plugin.version>
+        <jwt.version>0.11.5</jwt.version>
     </properties>
     <dependencies>
         <dependency>
@@ -83,9 +84,9 @@
         </dependency>
 
         <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-spring-boot-starter</artifactId>
-            <version>${otel.version}</version>
+            <groupId>ru.stroy1click</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -105,19 +106,39 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
     </dependencies>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.opentelemetry.instrumentation</groupId>
-                <artifactId>opentelemetry-instrumentation-bom</artifactId>
-                <version>${otel.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <repositories>
+        <repository>
+            <id>stroy1click-nexus</id>
+            <url>https://nexus.stroy1click.ru/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
@@ -153,7 +174,7 @@
                     <verbose>true</verbose>
                     <images>
                         <image>
-                            <name>${docker.image.prefix}/${docker.image.name}</name>
+                            <name>${docker.image.prefix}/${docker.image.name}-arm64</name>
                             <build>
                                 <dockerFileDir>${project.basedir}</dockerFileDir>
                                 <assembly>

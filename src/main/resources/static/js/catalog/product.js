@@ -1,179 +1,138 @@
-const SIZE = 20;
-
 document.addEventListener('DOMContentLoaded', () => {
-    const match = window.location.pathname.match(/\/product-types\/(\d+)/);
-    const productTypeId = match ? match[1] : null;
+    const match = window.location.pathname.match(/\/products\/(\d+)/);
+    const productId = match ? match[1] : null;
 
-    if (productTypeId) {
-        loadFilters(productTypeId);
-        loadInitialProducts(productTypeId, 0);
-
-        const applyBtn = document.getElementById('applyBtn');
-        if (applyBtn) {
-            applyBtn.onclick = () => applyFilters(productTypeId, 0);
-        }
+    if (productId) {
+        loadProductInfo(productId);
+        loadProductImages(productId);
+    } else {
+        console.error("Не удалось определить ID товара из URL");
     }
 });
 
-function goToProduct(id) {
-    window.location.href = `/products/${id}`;
-}
+let currentProductUnit = null;
 
-async function loadFilters(productTypeId) {
-    const container = document.getElementById('dynamic-filters');
+const unitLabels = {
+    PIECE: 'шт.',
+    KG: 'кг',
+    GRAM: 'г',
+    LITER: 'л',
+    ML: 'мл',
+    METER: 'м',
+    PACK: 'упак.'
+};
+async function loadProductInfo(id) {
     try {
-        const res = await fetch(`/api/v1/attribute-options?productTypeId=${productTypeId}`);
-        const values = await res.json();
 
-        const grouped = values.reduce((acc, item) => {
-            acc[item.attributeId] = acc[item.attributeId] || [];
-            acc[item.attributeId].push(item);
-            return acc;
-        }, {});
+        const response = await fetch(`/api/v1/products/${id}`);
+        if (!response.ok) throw new Error('Ошибка загрузки данных');
 
-        container.innerHTML = '';
-        for (const attrId in grouped) {
-            const attrRes = await fetch(`/api/v1/attributes/${attrId}`);
-            const attrData = await attrRes.json();
+        const data = await response.json(); // ProductDto
 
-            container.insertAdjacentHTML('beforeend', `
-                <div class="filter-group">
-                    <h4 class="filter-title">${attrData.title}</h4>
-                    <div class="filter-options">
-                        ${grouped[attrId].map(v => `
-                            <label class="filter-label">
-                                <input type="checkbox" class="filter-checkbox" value="${v.value}">
-                                <span>${v.value}</span>
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>`);
+        document.getElementById('productId').textContent = data.id;
+        document.getElementById('productTitle').textContent = data.title;
+        document.getElementById('productDescription').textContent = data.description;
+
+        // Получаем единицу измерения
+        const unit = unitLabels[data.unit] || 'шт.';
+        // Выводим цену вместе с единицей измерения
+        document.getElementById('productPrice').textContent = `${data.price.toLocaleString()} ₽ / ${unit}`;
+        currentProductUnit = data.unit;
+
+        const stockEl = document.getElementById('productStock');
+        if (data.inStock) {
+            stockEl.textContent = 'В наличии';
+            stockEl.className = 'stock in-stock';
+        } else {
+            stockEl.textContent = 'Нет в наличии';
+            stockEl.className = 'stock out-of-stock';
         }
-    } catch (e) { console.error("Ошибка фильтров", e); }
-}
-
-async function applyFilters(productTypeId, page = 0) {
-    const grid = document.getElementById('grid');
-    grid.innerHTML = 'Загрузка...';
-
-    const filterData = { attributes: {} };
-    document.querySelectorAll('.filter-group').forEach(group => {
-        const title = group.querySelector('.filter-title').innerText.trim();
-        const checked = Array.from(group.querySelectorAll('.filter-checkbox:checked')).map(cb => cb.value);
-        if (checked.length > 0) {
-            filterData.attributes[title] = checked.join(',');
-        }
-    });
-
-    try {
-        const res = await fetch(`/api/v1/product-attribute-assignments/filter?page=${page}&size=${SIZE}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(filterData)
-        });
-
-        const pageData = await res.json();
-        const productIds = [...new Set(pageData.content.map(item => item.productId))];
-
-        const products = await Promise.all(
-            productIds.map(id => fetch(`/api/v1/products/${id}`).then(r => r.json()))
-        );
-
-        renderGrid(products);
-        renderPagination(pageData, productTypeId, true);
     } catch (e) {
-        grid.innerHTML = 'Ошибка загрузки данных.';
+        console.error(e);
+        document.getElementById('productTitle').textContent = 'Ошибка загрузки товара';
     }
 }
 
-async function loadProductImages(productId) {
-    const container = document.getElementById(`carousel-${productId}`);
-    try {
-        const res = await fetch(`/api/v1/products/${productId}/images`);
-        const images = await res.json();
+let currentImageIndex = 0;
+let productImages = [];
 
-        if (!images || images.length === 0) {
-            container.innerHTML = `<img src="/placeholder.png" class="carousel-image active">`;
-            return;
+async function loadProductImages(id) {
+    try {
+        const response = await fetch(`/api/v1/products/${id}/images`);
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+            productImages = data.map(img => `/api/v1/storage/catalog/${img.link}`);
+        } else {
+            productImages = ['/static/images/placeholder.png'];
         }
 
-        let html = images.map((img, idx) => `
-            <img src="/api/v1/storage/${img.link}" class="carousel-image ${idx === 0 ? 'active' : ''}">
+        renderGallery();
+    } catch (e) {
+        console.error(e);
+        productImages = ['/static/images/placeholder.png'];
+        renderGallery();
+    }
+}
+
+function renderGallery() {
+    const mainImgContainer = document.getElementById('mainImageContainer');
+    const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+
+    const hasMultiple = productImages.length > 1;
+
+    mainImgContainer.innerHTML = `
+        <img src="${productImages[currentImageIndex]}" alt="Товар" class="fade-in">
+        ${hasMultiple ? `
+            <button class="gallery-arrow prev" onclick="changeSlide(-1)">❮</button>
+            <button class="gallery-arrow next" onclick="changeSlide(1)">❯</button>
+        ` : ''}
+    `;
+
+    if (hasMultiple) {
+        thumbnailsContainer.innerHTML = productImages.map((src, idx) => `
+            <img src="${src}" 
+                 class="${idx === currentImageIndex ? 'active-thumb' : ''}" 
+                 onclick="setSlide(${idx})" 
+                 alt="thumb">
         `).join('');
-
-        if (images.length > 1) {
-            html += `
-                <button class="carousel-btn prev-btn" onclick="changeSlide(event, ${productId}, -1)">❮</button>
-                <button class="carousel-btn next-btn" onclick="changeSlide(event, ${productId}, 1)">❯</button>
-            `;
-        }
-        container.innerHTML = html;
-    } catch (e) { container.innerHTML = `<img src="/placeholder.png" class="carousel-image active">`; }
-}
-
-/**
- * Смена слайда с остановкой всплытия события
- */
-window.changeSlide = function(event, productId, dir) {
-    event.stopPropagation(); // Чтобы не сработал переход на товар
-    const container = document.getElementById(`carousel-${productId}`);
-    const imgs = container.querySelectorAll('.carousel-image');
-    let idx = Array.from(imgs).findIndex(img => img.classList.contains('active'));
-    imgs[idx].classList.remove('active');
-    idx = (idx + dir + imgs.length) % imgs.length;
-    imgs[idx].classList.add('active');
-}
-
-async function loadInitialProducts(productTypeId, page) {
-    try {
-        const res = await fetch(`/api/v1/products?productTypeId=${productTypeId}&page=${page}&size=${SIZE}`);
-        const data = await res.json();
-        renderGrid(data.content);
-        renderPagination(data, productTypeId, false);
-    } catch (e) { console.error(e); }
-}
-
-
-function renderPagination(data, productTypeId, isFilter) {
-    const container = document.getElementById('pagination');
-    container.innerHTML = '';
-
-    if (data.totalPages <= 1) return;
-
-    for (let i = 0; i < data.totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.innerText = i + 1;
-
-        if (i === data.page) {
-            btn.classList.add('active');
-        }
-
-        btn.onclick = () => {
-            if (isFilter) {
-                applyFilters(productTypeId, i);
-            } else {
-                loadInitialProducts(productTypeId, i);
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-        container.appendChild(btn);
+    } else {
+        thumbnailsContainer.innerHTML = '';
     }
 }
 
-function renderGrid(products) {
-    const grid = document.getElementById('grid');
-    grid.innerHTML = products.map(p => `
-        <div class="card">
-            <div class="img-carousel-container" id="carousel-${p.id}" onclick="goToProduct(${p.id})">
-                <div class="spinner-small"></div>
-            </div>
-            <div class="card-body">
-                <div class="card-title" onclick="goToProduct(${p.id})">${p.title}</div>
-                <div class="price">${p.price.toLocaleString()} ₽</div>
-                <button class="btn-add" onclick="event.stopPropagation(); addToCart(${p.id})">В корзину</button>
-            </div>
-        </div>
-    `).join('');
+window.changeSlide = function(step) {
+    currentImageIndex += step;
+    if (currentImageIndex >= productImages.length) currentImageIndex = 0;
+    if (currentImageIndex < 0) currentImageIndex = productImages.length - 1;
+    renderGallery();
+};
 
-    products.forEach(p => loadProductImages(p.id));
+window.setSlide = function(index) {
+    currentImageIndex = index;
+    renderGallery();
+};
+
+const addToCartBtn = document.querySelector('.add-to-cart-btn');
+
+if (addToCartBtn) {
+    addToCartBtn.onclick = () => {
+        const id = document.getElementById('productId').innerText;
+        const title = document.getElementById('productTitle').innerText;
+        const priceRaw = document.getElementById('productPrice').innerText;
+        const price = parseFloat(priceRaw.replace(/[^\d.]/g, ''));
+
+        const imgEl = document.querySelector('#mainImageContainer img');
+        const imageSrc = imgEl ? imgEl.src : '';
+
+        const product = {
+            id: parseInt(id),
+            title: title,
+            unit: currentProductUnit || "PIECE",
+            image: imageSrc,
+            price: price
+        };
+
+        CartService.addToCart(product, 1);
+    };
 }

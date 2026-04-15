@@ -62,7 +62,7 @@ async function loadProductImages(productId) {
         }
 
         let html = images.map((img, idx) => `
-            <img src="/api/v1/storage/${img.link}" class="carousel-image ${idx === 0 ? 'active' : ''}">
+            <img src="/api/v1/storage/catalog/${img.link}" class="carousel-image ${idx === 0 ? 'active' : ''}">
         `).join('');
 
         if (images.length > 1) {
