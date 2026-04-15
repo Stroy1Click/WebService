@@ -126,16 +126,19 @@
         </dependency>
     </dependencies>
 
-    <distributionManagement>
+    <repositories>
         <repository>
-            <id>nexus-releases</id>
-            <url>https://nexus.stroy1click.ru/repository/maven-releases/</url>
+            <id>stroy1click-nexus</id>
+            <url>https://nexus.stroy1click.ru/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <url>https://nexus.stroy1click.ru/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    </repositories>
 
     <build>
         <plugins>
