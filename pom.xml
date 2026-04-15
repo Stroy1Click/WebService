@@ -126,6 +126,17 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <url>https://nexus.stroy1click.ru/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>https://nexus.stroy1click.ru/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
