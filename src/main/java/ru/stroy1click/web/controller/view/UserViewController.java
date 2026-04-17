@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.user.controller;
+package ru.stroy1click.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

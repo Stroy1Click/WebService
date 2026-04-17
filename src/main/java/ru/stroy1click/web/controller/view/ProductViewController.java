@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.product.controller;
+package ru.stroy1click.web.controller.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.attribute.controller;
+package ru.stroy1click.web.controller.api;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ import ru.stroy1click.domain.attribute.dto.ProductAttributeValueFilter;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/product-attribute-assignments")
 @RateLimiter(name = "productAttributeAssignmentLimiter")
-public class ProductAttributeAssignmentController {
+public class ProductAttributeAssignmentApiController {
 
     private final ProductAttributeAssignmentClient productAttributeAssignmentClient;
 

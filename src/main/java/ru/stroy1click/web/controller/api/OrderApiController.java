@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.order.controller;
+package ru.stroy1click.web.controller.api;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
@@ -22,7 +22,7 @@ import java.util.Locale;
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
 @RateLimiter(name = "orderLimiter")
-public class OrderController {
+public class OrderApiController {
 
     private final MessageSource messageSource;
 

@@ -1,4 +1,4 @@
-package ru.stroy1click.web.controller;
+package ru.stroy1click.web.advice;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;

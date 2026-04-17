@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.auth.controller;
+package ru.stroy1click.web.controller.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.Locale;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthApiController {
 
     private final AuthClient authClient;
 

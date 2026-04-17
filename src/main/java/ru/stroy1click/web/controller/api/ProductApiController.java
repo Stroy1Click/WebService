@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.product.controller;
+package ru.stroy1click.web.controller.api;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/products")
 @RateLimiter(name = "productLimiter")
-public class ProductController {
+public class ProductApiController {
 
     private final ProductClient productClient;
 

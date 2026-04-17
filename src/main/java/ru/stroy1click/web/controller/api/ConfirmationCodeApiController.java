@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.confirmationcode.controller;
+package ru.stroy1click.web.controller.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.Locale;
 @RestController
 @RequestMapping("/api/v1/confirmation-codes")
 @RequiredArgsConstructor
-public class ConfirmationCodeController {
+public class ConfirmationCodeApiController {
 
     private final ConfirmationCodeClient confirmationCodeClient;
 
