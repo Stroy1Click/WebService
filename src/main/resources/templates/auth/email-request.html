@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../../static/css/common/header.css" th:href="@{/css/common/header.css}">
     <link rel="stylesheet" href="../../static/css/auth/confirmation-code.css" th:href="@{/css/auth/confirmation-code.css}">
     <script src="../../static/js/common/header.js" th:src="@{/js/common/header.js}"></script>
-    <link rel="icon" type="image/x-icon" th:href="@{/images/icon.ico}" href="../../static/images/icon.png">
+    <link rel="icon" type="image/png" th:href="@{/images/favicon.ico}" href="../../static/images/favicon.ico">
     <script th:src="@{/js/auth/email-request.js}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -83,16 +83,8 @@
             <div id="error-message" style="color: red; margin-top: 10px; display: none;"></div>
         </form>
 
-        <div class="grid">
-            <div class="grid-col">
-                <div class="slot slot-tall"></div>
-                <div class="slot slot-short"></div>
-            </div>
-
-            <div class="grid-col">
-                <div class="slot slot-mini"></div>
-                <div class="slot slot-mega"></div>
-            </div>
+        <div class="confirmation-image">
+            <img src="../../static/images/auth.png" th:src="@{/images/auth.png}" alt="Подтверждение почты">
         </div>
 
     </div>
