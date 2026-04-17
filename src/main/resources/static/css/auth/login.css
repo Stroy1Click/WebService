@@ -188,3 +188,29 @@ body {
 @media (max-width: 370px) {
     .logo { font-size: 18px; }
 }
+
+/* Удалите или закомментируйте старые стили для .grid, .grid-col, .slot */
+
+/* Добавьте новый стиль для картинки */
+.login-image {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.login-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+/* Для адаптива - на мобилках скрываем картинку */
+@media (max-width: 700px) {
+    .login-image {
+        display: none;
+    }
+}
