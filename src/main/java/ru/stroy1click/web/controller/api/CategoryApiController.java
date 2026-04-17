@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.category.controller;
+package ru.stroy1click.web.controller.api;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/categories")
 @RateLimiter(name = "categoryLimiter")
-public class CategoryController {
+public class CategoryApiController {
 
     private final CategoryClient categoryClient;
 

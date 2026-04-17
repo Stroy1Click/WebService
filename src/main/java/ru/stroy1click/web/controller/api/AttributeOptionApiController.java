@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.attribute.controller;
+package ru.stroy1click.web.controller.api;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/attribute-options")
 @RateLimiter(name = "productTypeAttributeLimiter")
-public class AttributeOptionController {
+public class AttributeOptionApiController {
 
     private final AttributeOptionClient attributeOptionClient;
 

@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.subcategory.controller;
+package ru.stroy1click.web.controller.view;
 
 
 import org.springframework.stereotype.Controller;

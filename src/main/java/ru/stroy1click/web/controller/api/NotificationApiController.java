@@ -1,4 +1,4 @@
-package ru.stroy1click.domain.notification.controller;
+package ru.stroy1click.web.controller.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -12,7 +12,7 @@ import ru.stroy1click.domain.order.dto.OrderDto;
 @RestController
 @RequestMapping("/api/v1/notifications")
 @RequiredArgsConstructor
-public class NotificationController {
+public class NotificationApiController {
 
     private final NotificationClient notificationClient;
 
