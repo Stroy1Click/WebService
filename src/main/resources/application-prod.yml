@@ -15,6 +15,12 @@ spring:
   threads:
     virtual:
       enabled: true
+  thymeleaf:
+    cache: true
+  web:
+    resources:
+      cache:
+        period: 600 # 10 минут
 
 management:
   health:
