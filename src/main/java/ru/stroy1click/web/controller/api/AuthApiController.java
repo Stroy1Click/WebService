@@ -10,6 +10,7 @@ import ru.stroy1click.domain.auth.client.AuthClient;
 import ru.stroy1click.common.exception.*;
 import ru.stroy1click.domain.common.util.ValidationErrorUtils;
 import ru.stroy1click.domain.user.dto.UserDto;
+import ru.stroy1click.infrastructure.captcha.service.CaptchaService;
 
 import java.util.Locale;
 
@@ -22,11 +23,25 @@ public class AuthApiController {
 
     private final MessageSource messageSource;
 
+    private final CaptchaService captchaService;
+
     @PostMapping("/registration")
-    public ResponseEntity<String> registration(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
+    public ResponseEntity<String> registration(@RequestBody @Valid UserDto userDto,
+                                               BindingResult bindingResult,
+                                               @RequestParam("smart-token") String token) {
         if(bindingResult.hasFieldErrors()) throw new ValidationException(
                 ValidationErrorUtils.collectErrorsToString(bindingResult.getFieldErrors())
         );
+
+        if(!this.captchaService.validate(token)) {
+            throw new ValidationException(
+                    this.messageSource.getMessage(
+                            "validation.captcha.invalid",
+                            null,
+                            Locale.getDefault()
+                    )
+            );
+        }
 
         userDto.setIsEmailConfirmed(false);
         this.authClient.registration(userDto);
