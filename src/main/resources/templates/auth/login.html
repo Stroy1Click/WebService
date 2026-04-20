@@ -9,6 +9,7 @@
     <script th:src="@{/js/common/header.js}"></script>
     <link rel="icon" type="image/png" th:href="@{/images/favicon.ico}" href="../../static/images/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
 </head>
 <body>
 <header class="main-header">
@@ -95,6 +96,15 @@
                     <a th:href="@{/account/registration}">Зарегистрироваться</a>
                     <a th:href="@{/account/email/request}">Подтвердить почту</a>
                 </div>
+
+                <div
+                        style="height: 100px"
+                        id="captcha-container"
+                        class="smart-captcha"
+                        data-sitekey="ysc1_empQ7XP7dWGS0kXMcFrM4SAXUTG2gZfbhSUFMidq01e172ec"
+                ></div>
+
+                <p></p>
 
                 <button type="submit" class="login-btn">Войти</button>
 

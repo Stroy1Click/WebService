@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 
 @Profile("dev")
@@ -26,6 +27,8 @@ public class DevSecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
 
     private final RefreshTokenLogoutHandler refreshTokenLogoutHandler;
+
+    private final CaptchaFilter captchaFilter;
 
     @Bean
     @Order(1)
@@ -75,7 +78,8 @@ public class DevSecurityConfig {
                 .logout(logout ->
                         logout.logoutUrl("/logout")
                                 .addLogoutHandler(this.refreshTokenLogoutHandler)
-                                .logoutSuccessUrl("/account/login"));
+                                .logoutSuccessUrl("/account/login"))
+                .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
