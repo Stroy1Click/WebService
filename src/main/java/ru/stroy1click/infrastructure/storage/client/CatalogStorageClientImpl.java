@@ -24,7 +24,7 @@ public class CatalogStorageClientImpl implements CatalogStorageClient {
 
     @Override
     public byte[] downloadImage(String link) {
-        log.info("getPhoto {}", link);
+        log.info("downloadImage {}", link);
         try {
             return this.restClient.get()
                     .uri("/{link}",link )

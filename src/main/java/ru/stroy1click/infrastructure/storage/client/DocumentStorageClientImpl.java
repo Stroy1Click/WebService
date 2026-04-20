@@ -24,7 +24,7 @@ public class DocumentStorageClientImpl implements DocumentStorageClient {
 
     @Override
     public byte[] downloadDocument(String link) {
-        log.info("getPhoto {}", link);
+        log.info("downloadDocument {}", link);
         try {
             return this.restClient.get()
                     .uri("/{link}",link )
