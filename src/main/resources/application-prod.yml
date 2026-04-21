@@ -168,7 +168,7 @@ jwt:
   secret: 5367566B5970337336762342342342341139792F4123F452811482B4D6251655468576D5A71347437
 
 captcha:
-  secret: ysc2_empQ7XP7dWGS0kXMcFrMLrc6dCfh7TZ6p0YNagvv747f5eca
+  secret: secret
 
 url:
   user: https://api.stroy1click.ru/api/v1/users
