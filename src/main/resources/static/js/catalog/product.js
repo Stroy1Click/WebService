@@ -5,12 +5,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (productId) {
         loadProductInfo(productId);
         loadProductImages(productId);
+        initQuantitySelector();
     } else {
         console.error("Не удалось определить ID товара из URL");
     }
 });
 
 let currentProductUnit = null;
+let currentProductInStock = true;
+let currentProductId = null;
 
 const unitLabels = {
     PIECE: 'шт.',
@@ -21,36 +24,155 @@ const unitLabels = {
     METER: 'м',
     PACK: 'упак.'
 };
+
 async function loadProductInfo(id) {
     try {
-
         const response = await fetch(`/api/v1/products/${id}`);
         if (!response.ok) throw new Error('Ошибка загрузки данных');
+        const data = await response.json();
 
-        const data = await response.json(); // ProductDto
-
+        currentProductId = data.id;
         document.getElementById('productId').textContent = data.id;
         document.getElementById('productTitle').textContent = data.title;
         document.getElementById('productDescription').textContent = data.description;
 
-        // Получаем единицу измерения
         const unit = unitLabels[data.unit] || 'шт.';
-        // Выводим цену вместе с единицей измерения
         document.getElementById('productPrice').textContent = `${data.price.toLocaleString()} ₽ / ${unit}`;
         currentProductUnit = data.unit;
+        currentProductInStock = data.inStock === true;
 
         const stockEl = document.getElementById('productStock');
-        if (data.inStock) {
+        if (currentProductInStock) {
             stockEl.textContent = 'В наличии';
             stockEl.className = 'stock in-stock';
         } else {
             stockEl.textContent = 'Нет в наличии';
             stockEl.className = 'stock out-of-stock';
+            disablePurchaseControls(true);
         }
     } catch (e) {
         console.error(e);
         document.getElementById('productTitle').textContent = 'Ошибка загрузки товара';
     }
+}
+
+function disablePurchaseControls(disabled) {
+    const addBtn = document.getElementById('addToCartBtn');
+    const minus = document.getElementById('qtyMinus');
+    const plus = document.getElementById('qtyPlus');
+    const qtyInput = document.getElementById('quantityInput');
+    if (addBtn) addBtn.disabled = disabled;
+    if (minus) minus.disabled = disabled;
+    if (plus) plus.disabled = disabled;
+    if (qtyInput) qtyInput.disabled = disabled;
+}
+
+function initQuantitySelector() {
+    const qtyInput = document.getElementById('quantityInput');
+    const minusBtn = document.getElementById('qtyMinus');
+    const plusBtn = document.getElementById('qtyPlus');
+    const addToCartBtn = document.getElementById('addToCartBtn');
+
+    if (!qtyInput) {
+        createQuantitySelector();
+        return;
+    }
+
+    qtyInput.min = 1;
+    qtyInput.value = 1;
+    qtyInput.max = 999999;
+
+    qtyInput.addEventListener('keydown', (e) => {
+        e.preventDefault();
+    });
+
+    if (minusBtn) {
+        minusBtn.onclick = (e) => {
+            e.preventDefault();
+            changeQuantity(-1);
+        };
+    }
+    if (plusBtn) {
+        plusBtn.onclick = (e) => {
+            e.preventDefault();
+            changeQuantity(1);
+        };
+    }
+
+    qtyInput.addEventListener('change', () => {
+        let val = parseInt(qtyInput.value);
+        if (isNaN(val) || val < 1) val = 1;
+        if (val > 999999) val = 999999;
+        qtyInput.value = val;
+    });
+
+    if (addToCartBtn) {
+        addToCartBtn.onclick = () => {
+            if (!currentProductInStock) {
+                alert('Товар отсутствует в наличии');
+                return;
+            }
+            const quantity = parseInt(qtyInput.value);
+            if (quantity < 1) {
+                alert('Количество должно быть не менее 1');
+                return;
+            }
+            addToCart(quantity);
+        };
+    }
+}
+
+function createQuantitySelector() {
+    const purchaseDiv = document.querySelector('.product-purchase');
+    if (!purchaseDiv) return;
+    const selectorHtml = `
+        <div class="quantity-selector">
+            <label>Количество:</label>
+            <div class="qty-control">
+                <button class="qty-btn" id="qtyMinus">−</button>
+                <input type="number" id="quantityInput" value="1" min="1" readonly>
+                <button class="qty-btn" id="qtyPlus">+</button>
+            </div>
+        </div>
+    `;
+    const addBtn = purchaseDiv.querySelector('.add-to-cart-btn');
+    if (addBtn) {
+        addBtn.insertAdjacentHTML('beforebegin', selectorHtml);
+    } else {
+        purchaseDiv.innerHTML += selectorHtml;
+    }
+    initQuantitySelector();
+}
+
+function changeQuantity(delta) {
+    const qtyInput = document.getElementById('quantityInput');
+    if (!qtyInput) return;
+    let val = parseInt(qtyInput.value);
+    if (isNaN(val)) val = 1;
+    val += delta;  // delta = -1 или +1
+    if (val < 1) val = 1;
+    if (val > 999999) val = 999999;
+    qtyInput.value = val;
+}
+
+function addToCart(quantity) {
+    const id = currentProductId || document.getElementById('productId').innerText;
+    const title = document.getElementById('productTitle').innerText;
+    const priceRaw = document.getElementById('productPrice').innerText;
+    const price = parseFloat(priceRaw.replace(/[^\d.]/g, ''));
+    const imgEl = document.querySelector('#mainImageContainer img');
+    const imageSrc = imgEl ? imgEl.src : '';
+
+    const product = {
+        id: parseInt(id),
+        title: title,
+        unit: currentProductUnit || "PIECE",
+        image: imageSrc,
+        price: price,
+        maxQuantity: 999999
+    };
+
+    CartService.addToCart(product, quantity);
 }
 
 let currentImageIndex = 0;
@@ -112,27 +234,3 @@ window.setSlide = function(index) {
     currentImageIndex = index;
     renderGallery();
 };
-
-const addToCartBtn = document.querySelector('.add-to-cart-btn');
-
-if (addToCartBtn) {
-    addToCartBtn.onclick = () => {
-        const id = document.getElementById('productId').innerText;
-        const title = document.getElementById('productTitle').innerText;
-        const priceRaw = document.getElementById('productPrice').innerText;
-        const price = parseFloat(priceRaw.replace(/[^\d.]/g, ''));
-
-        const imgEl = document.querySelector('#mainImageContainer img');
-        const imageSrc = imgEl ? imgEl.src : '';
-
-        const product = {
-            id: parseInt(id),
-            title: title,
-            unit: currentProductUnit || "PIECE",
-            image: imageSrc,
-            price: price
-        };
-
-        CartService.addToCart(product, 1);
-    };
-}

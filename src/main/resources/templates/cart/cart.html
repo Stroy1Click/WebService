@@ -497,6 +497,10 @@
         </div>
     `;
         }).join('');
+
+        if (totalSpan) {
+            totalSpan.innerText = total.toLocaleString();
+        }
     }
 
     function escapeHtml(str) {

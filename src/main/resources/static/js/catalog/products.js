@@ -1,4 +1,5 @@
 const SIZE = 20;
+let allProducts = []; // Глобальный массив для хранения загруженных товаров
 
 document.addEventListener('DOMContentLoaded', () => {
     const match = window.location.pathname.match(/\/product-types\/(\d+)/);
@@ -54,7 +55,7 @@ async function loadFilters(productTypeId) {
 
 async function applyFilters(productTypeId, page = 0) {
     const grid = document.getElementById('grid');
-    grid.innerHTML = 'Загрузка...';
+    grid.innerHTML = '<div class="loader-container"><div class="spinner"></div></div>';
 
     const filterData = { attributes: {} };
     document.querySelectorAll('.filter-group').forEach(group => {
@@ -79,10 +80,12 @@ async function applyFilters(productTypeId, page = 0) {
             productIds.map(id => fetch(`/api/v1/products/${id}`).then(r => r.json()))
         );
 
+        allProducts = products; // Обновляем глобальный массив
         renderGrid(products);
         renderPagination(pageData, productTypeId, true);
     } catch (e) {
         grid.innerHTML = 'Ошибка загрузки данных.';
+        console.error(e);
     }
 }
 
@@ -93,7 +96,7 @@ async function loadProductImages(productId) {
         const images = await res.json();
 
         if (!images || images.length === 0) {
-            container.innerHTML = `<img src="/placeholder.png" class="carousel-image active">`;
+            container.innerHTML = `<img src="/static/images/placeholder.png" class="carousel-image active">`;
             return;
         }
 
@@ -108,16 +111,17 @@ async function loadProductImages(productId) {
             `;
         }
         container.innerHTML = html;
-    } catch (e) { container.innerHTML = `<img src="/placeholder.png" class="carousel-image active">`; }
+    } catch (e) {
+        container.innerHTML = `<img src="/static/images/placeholder.png" class="carousel-image active">`;
+    }
 }
 
-/**
- * Смена слайда с остановкой всплытия события
- */
 window.changeSlide = function(event, productId, dir) {
-    event.stopPropagation(); // Чтобы не сработал переход на товар
+    event.stopPropagation();
     const container = document.getElementById(`carousel-${productId}`);
     const imgs = container.querySelectorAll('.carousel-image');
+    if (imgs.length <= 1) return;
+
     let idx = Array.from(imgs).findIndex(img => img.classList.contains('active'));
     imgs[idx].classList.remove('active');
     idx = (idx + dir + imgs.length) % imgs.length;
@@ -128,11 +132,11 @@ async function loadInitialProducts(productTypeId, page) {
     try {
         const res = await fetch(`/api/v1/products?productTypeId=${productTypeId}&page=${page}&size=${SIZE}`);
         const data = await res.json();
+        allProducts = data.content; // Сохраняем товары
         renderGrid(data.content);
         renderPagination(data, productTypeId, false);
     } catch (e) { console.error(e); }
 }
-
 
 function renderPagination(data, productTypeId, isFilter) {
     const container = document.getElementById('pagination');
@@ -143,10 +147,7 @@ function renderPagination(data, productTypeId, isFilter) {
     for (let i = 0; i < data.totalPages; i++) {
         const btn = document.createElement('button');
         btn.innerText = i + 1;
-
-        if (i === data.page) {
-            btn.classList.add('active');
-        }
+        if (i === data.number) btn.classList.add('active');
 
         btn.onclick = () => {
             if (isFilter) {
@@ -172,9 +173,13 @@ const unitLabels = {
 
 function renderGrid(products) {
     const grid = document.getElementById('grid');
+    if (!products || products.length === 0) {
+        grid.innerHTML = '<p>Товары не найдены</p>';
+        return;
+    }
+
     grid.innerHTML = products.map(p => {
         const unit = unitLabels[p.unit] || 'шт.';
-
         return `
         <div class="card">
             <div class="img-carousel-container" id="carousel-${p.id}" onclick="goToProduct(${p.id})">
@@ -191,26 +196,29 @@ function renderGrid(products) {
     products.forEach(p => loadProductImages(p.id));
 }
 
-const addToCartBtn = document.querySelector('.add-to-cart-btn');
+function addToCart(productId) {
+    const productData = allProducts.find(p => p.id === productId);
 
-if (addToCartBtn) {
-    addToCartBtn.onclick = () => {
-        const id = document.getElementById('productId').innerText;
-        const title = document.getElementById('productTitle').innerText;
-        const priceRaw = document.getElementById('productPrice').innerText;
-        const price = parseFloat(priceRaw.replace(/[^\d.]/g, ''));
+    if (!productData) {
+        console.error("Данные товара не найдены");
+        return;
+    }
 
-        const imgEl = document.querySelector('#mainImageContainer img');
-        const imageSrc = imgEl ? imgEl.src : '';
+    const carouselImg = document.querySelector(`#carousel-${productId} img.active`);
+    const imageSrc = carouselImg ? carouselImg.getAttribute('src') : '/static/images/placeholder.png';
 
-        const product = {
-            id: parseInt(id),
-            title: title,
-            price: price,
-            image: imageSrc
-        };
-
-        // Вызываем сервис корзины
-        CartService.addToCart(product, 1);
+    const productToCart = {
+        id: productData.id,
+        title: productData.title,
+        price: productData.price,
+        unit: productData.unit || "PIECE",
+        image: imageSrc,
+        maxQuantity: 999999
     };
+
+    if (window.CartService) {
+        window.CartService.addToCart(productToCart, 1);
+    } else {
+        console.error("CartService не найден");
+    }
 }

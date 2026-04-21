@@ -92,7 +92,15 @@
         </div>
 
         <div class="product-purchase">
-            <button class="add-to-cart-btn">В корзину</button>
+            <div class="quantity-selector">
+                <label>Количество:</label>
+                <div class="qty-control">
+                    <button class="qty-btn" id="qtyMinus">−</button>
+                    <input type="number" id="quantityInput" value="1" min="1" readonly>
+                    <button class="qty-btn" id="qtyPlus">+</button>
+                </div>
+            </div>
+            <button class="add-to-cart-btn" id="addToCartBtn">В корзину</button>
         </div>
 
     </div>
@@ -110,14 +118,5 @@
 </footer>
 <script src="../../static/js/cart/cart.js" th:src="@{/js/cart/cart.js}"></script>
 <script src="../../static/js/catalog/product.js" th:src="@{/js/catalog/product.js}"></script>
-<script>
-    // Простая анимация спиннера загрузки
-    const style = document.createElement('style');
-    style.innerHTML = `
-      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    `;
-    document.head.appendChild(style);
-</script>
-
 </body>
 </html>
