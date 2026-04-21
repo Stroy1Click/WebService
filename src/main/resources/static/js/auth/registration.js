@@ -25,7 +25,17 @@ document.addEventListener('DOMContentLoaded', function () {
         registerBtn.addEventListener('click', async function (e) {
             e.preventDefault();
 
+            const form = document.getElementById('registrationForm');
+            if (!form) return;
+
             clearAllErrors();
+
+            const captchaToken = form.querySelector('input[name="smart-token"]')?.value;
+
+            if (!captchaToken) {
+                showGlobalError("Пожалуйста, подтвердите, что вы не робот (пройдите капчу)");
+                return;
+            }
 
             const userDto = {
                 firstName: form.querySelector('input[name="firstName"]').value.trim(),
@@ -39,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const csrfToken = document.getElementById('csrfToken')?.value;
 
             try {
-                const response = await fetch('/api/v1/auth/registration', {
+                const response = await fetch(`/api/v1/auth/registration?smart-token=${encodeURIComponent(captchaToken)}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -60,6 +70,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert('Регистрация прошла успешно!');
                     window.location.href = '/account/login';
                 } else {
+                    if (window.smartCaptcha) {
+                        window.smartCaptcha.reset();
+                    }
                     handleServerErrors(response.status, data);
                 }
 

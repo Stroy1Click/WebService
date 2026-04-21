@@ -10,6 +10,7 @@
     <script th:src="@{/js/auth/registration.js}"></script>
     <link rel="icon" type="image/png" th:href="@{/images/favicon.ico}" href="../../static/images/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
 </head>
 <body>
 <header class="main-header">
@@ -106,6 +107,13 @@
 
             <input type="hidden" id="csrfToken" name="_csrf" th:value="${_csrf.token}"/>
 
+            <div
+                    style="height: 100px"
+                    id="captcha-container"
+                    class="smart-captcha"
+                    data-sitekey="ysc1_MVxrWrkafTULzfda9LbHj10ECtiFSmdhJqsmNjP3f77c3d8c"
+            ></div>
+            <p></p>
 
             <button type="button" id="registerBtn">Зарегистрироваться</button>
         </form>
